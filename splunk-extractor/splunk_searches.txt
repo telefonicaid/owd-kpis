@@ -1,0 +1,7 @@
+delivered_lasthour_ncc
+incoming_by_ip_lasthour
+terminales_activos_ncc_lasthour
+terminales_con_registros_ncc_lastday
+peticiones_registro_ncc_lasthour
+GWU_enviados_by_Organizacion
+incoming_by_ip_ncc_lasthour

@@ -1,0 +1,8 @@
+argparse-1.2.1.tar.gz  [http://argparse.googlecode.com/files/argparse-1.2.1.tar.gz]
+pymongo.tar.gz [https://pypi.python.org/packages/source/p/pymongo/pymongo-2.6.3.tar.gz#md5=da4a7d6ee47fe30b3978b8805d266167]
+logging-0.4.9.6.tar.gz [https://pypi.python.org/packages/source/l/logging/logging-0.4.9.6.tar.gz#md5=dc0a7ebc8b8970263911e11e7b7e1ca8]
+splunk-sdk-python-1.2.0.zip [https://pypi.python.org/packages/source/s/splunk-sdk/splunk-sdk-1.2.2.tar.gz#md5=b97b22685342ac64ae5222a2acec9806]
+SQLAlchemy-0.9.3.tar.gz [https://pypi.python.org/packages/source/S/SQLAlchemy/SQLAlchemy-0.9.3.tar.gz]
+MySQL-python-1.2.5.zip [https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip#md5=654f75b302db6ed8dc5a898c625e030c]
+
+Also located in /root/script/librerias in kpisdb machine
