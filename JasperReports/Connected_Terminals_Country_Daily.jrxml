@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="102"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -282,37 +282,40 @@
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT tcn.fecha AS _day, CASE WHEN T9.alias IS NOT NULL
-	THEN T9.alias
-	ELSE 'rest'
-	END AS _alias, CASE WHEN T9.country IS NOT NULL THEN T9.country ELSE 'rest' END AS _country, SUM(tcn.total) AS total, MAX(tcn.total) AS _MAX, MIN(tcn.total) AS _MIN, ROUND(AVG(tcn.total),2) AS _AVG
+			<![CDATA[SELECT _all._country,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total
+FROM (
+SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.country IS NOT NULL
+	THEN T9.country ELSE 'RES'
+	END AS _country,
+	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
 LEFT JOIN
 (
-	SELECT tcn.fecha, DATE(tcn.fecha) AS _day, tcn.mcc, tcn.mnc, tcn.total AS total_d, ncc.country, op.alias AS alias
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
 	FROM terminales_con_registros_agr AS tcn
 	INNER JOIN network_country_codes AS ncc
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
+	WHERE fecha >= '2014-03-03 00:00:00' AND fecha < '2014-03-04 23:59:00'
+	GROUP BY country
 	ORDER BY total_d DESC
 	LIMIT 2 /* Cambiar en 9 en PRO */
 ) AS T9
-	ON tcn.mcc = T9.mcc AND tcn.mnc = T9.mnc
-WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
-GROUP BY _alias
-ORDER BY tcn.total DESC]]>
+	ON tcn.mcc = T9.mcc
+WHERE tcn.fecha >= '2014-03-03 00:00:00' AND tcn.fecha < '2014-03-04 23:59:00'
+GROUP BY _country, _day
+ORDER BY _day ) _all
+GROUP BY _all._country]]>
 		</queryString>
-		<field name="_day" class="java.sql.Timestamp"/>
-		<field name="_alias" class="java.lang.String"/>
 		<field name="_country" class="java.lang.String"/>
+		<field name="_MAX" class="java.math.BigDecimal"/>
+		<field name="_MIN" class="java.math.BigDecimal"/>
+		<field name="_AVG" class="java.math.BigDecimal"/>
 		<field name="total" class="java.math.BigDecimal">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
-		<field name="_MAX" class="java.lang.Integer"/>
-		<field name="_MIN" class="java.lang.Integer"/>
-		<field name="_AVG" class="java.math.BigDecimal"/>
 		<variable name="max_dmax" class="java.lang.Integer" calculation="Highest">
 			<variableExpression><![CDATA[$F{_MAX}]]></variableExpression>
 		</variable>
@@ -330,31 +333,33 @@ ORDER BY tcn.total DESC]]>
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT tcn.fecha, DATE(tcn.fecha) AS _day, tcn.mcc, tcn.mnc, tcn.total AS total_d, ncc.country, op.alias AS alias
-FROM terminales_con_registros_agr AS tcn
-INNER JOIN network_country_codes AS ncc
-	ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
-INNER JOIN operator AS op
-	ON ncc.alias = op.idoperator
-WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
-ORDER BY total_d DESC
-LIMIT 9]]>
+		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.country IS NOT NULL
+	THEN T9.country ELSE 'RES'
+	END AS _country,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE fecha >= '2014-03-03 00:00:00' AND fecha < '2014-03-04 23:59:00'
+	GROUP BY country
+	ORDER BY total_d DESC
+	LIMIT 2 /* Cambiar en 9 en PRO */
+) AS T9
+	ON tcn.mcc = T9.mcc
+WHERE tcn.fecha >= '2014-03-03 00:00:00' AND tcn.fecha < '2014-03-04 23:59:00'
+GROUP BY _country, _day
+ORDER BY total DESC, _day DESC]]>
 	</queryString>
-	<field name="fecha" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="_day" class="java.sql.Date"/>
-	<field name="mcc" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="mnc" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="total_d" class="java.lang.Integer"/>
-	<field name="country" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="alias" class="java.lang.String">
+	<field name="_country" class="java.lang.String"/>
+	<field name="total" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<background>
@@ -428,11 +433,8 @@ LIMIT 9]]>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<timeSeriesDataset>
-					<dataset>
-						<datasetRun subDataset="all_data" uuid="4002613a-ce10-4b4d-b4b6-a58f1a801beb"/>
-					</dataset>
 					<timeSeries>
-						<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
+						<seriesExpression><![CDATA[$F{_country}]]></seriesExpression>
 						<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
 						<valueExpression><![CDATA[$F{total}]]></valueExpression>
 					</timeSeries>
@@ -472,10 +474,7 @@ LIMIT 9]]>
 					<chartLegend/>
 				</chart>
 				<pieDataset>
-					<dataset>
-						<datasetRun subDataset="all_data" uuid="3dd8e20d-e6d5-4da9-b89c-65fc477b68f6"/>
-					</dataset>
-					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
+					<keyExpression><![CDATA[$F{_country}]]></keyExpression>
 					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}">
@@ -494,7 +493,7 @@ LIMIT 9]]>
 				</piePlot>
 			</pieChart>
 			<componentElement>
-				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="135" y="356" width="360" height="50"/>
+				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="156" y="356" width="360" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="all_data" uuid="13457d0b-224e-46bd-ba65-7dfc589364e1">
 						<datasetParameter name="from_date_d">
@@ -505,10 +504,10 @@ LIMIT 9]]>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="150" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
+					<jr:column width="50" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0" mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0" mode="Opaque" x="0" y="0" width="50" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -520,12 +519,12 @@ LIMIT 9]]>
 									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[Network]]></text>
+								<text><![CDATA[Country]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="50" height="15" forecolor="#000000" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -542,7 +541,7 @@ LIMIT 9]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="50" height="14" forecolor="#000000" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -554,7 +553,7 @@ LIMIT 9]]>
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{_alias}+"    "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{_country}+"    "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

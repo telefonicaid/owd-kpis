@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="148"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -282,37 +282,46 @@
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT tcn.fecha AS _day, CASE WHEN T9.alias IS NOT NULL
+			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total
+FROM (
+SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
 	ELSE 'rest'
-	END AS _alias, CASE WHEN T9.country IS NOT NULL THEN T9.country ELSE 'rest' END AS _country, SUM(tcn.total) AS total, MAX(tcn.total) AS _MAX, MIN(tcn.total) AS _MIN, ROUND(AVG(tcn.total),2) AS _AVG
+	END AS _alias,
+	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
+INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
 LEFT JOIN
 (
-	SELECT tcn.fecha, DATE(tcn.fecha) AS _day, tcn.mcc, tcn.mnc, tcn.total AS total_d, ncc.country, op.alias AS alias
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
 	FROM terminales_con_registros_agr AS tcn
 	INNER JOIN network_country_codes AS ncc
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
+	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+	GROUP BY alias
 	ORDER BY total_d DESC
 	LIMIT 2 /* Cambiar en 9 en PRO */
 ) AS T9
-	ON tcn.mcc = T9.mcc AND tcn.mnc = T9.mnc
-WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
-GROUP BY _alias
-ORDER BY tcn.total DESC]]>
+	ON op.alias = T9.alias
+WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+GROUP BY _alias, _day
+ORDER BY _day, tcn.total DESC) _all
+GROUP BY _all._alias
+ORDER BY _alias DESC]]>
 		</queryString>
-		<field name="_day" class="java.sql.Timestamp"/>
 		<field name="_alias" class="java.lang.String"/>
-		<field name="_country" class="java.lang.String"/>
+		<field name="_MAX" class="java.math.BigDecimal"/>
+		<field name="_MIN" class="java.math.BigDecimal"/>
+		<field name="_AVG" class="java.math.BigDecimal"/>
 		<field name="total" class="java.math.BigDecimal">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
-		<field name="_MAX" class="java.lang.Integer"/>
-		<field name="_MIN" class="java.lang.Integer"/>
-		<field name="_AVG" class="java.math.BigDecimal"/>
 		<variable name="max_dmax" class="java.lang.Integer" calculation="Highest">
 			<variableExpression><![CDATA[$F{_MAX}]]></variableExpression>
 		</variable>
@@ -330,31 +339,38 @@ ORDER BY tcn.total DESC]]>
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT tcn.fecha, DATE(tcn.fecha) AS _day, tcn.mcc, tcn.mnc, tcn.total AS total_d, ncc.country, op.alias AS alias
-FROM terminales_con_registros_agr AS tcn
+		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
+	THEN T9.alias
+	ELSE 'rest'
+	END AS _alias,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
 INNER JOIN network_country_codes AS ncc
-	ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 INNER JOIN operator AS op
-	ON ncc.alias = op.idoperator
-WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
-ORDER BY total_d DESC
-LIMIT 9]]>
+		ON ncc.alias = op.idoperator
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 2 /* Cambiar en 9 en PRO */
+) AS T9
+	ON op.alias = T9.alias
+WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+GROUP BY _alias, _day
+ORDER BY _day, tcn.total DESC]]>
 	</queryString>
-	<field name="fecha" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="_day" class="java.sql.Date"/>
-	<field name="mcc" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="mnc" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="total_d" class="java.lang.Integer"/>
-	<field name="country" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="alias" class="java.lang.String">
+	<field name="_alias" class="java.lang.String"/>
+	<field name="total" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<background>
@@ -428,9 +444,6 @@ LIMIT 9]]>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<timeSeriesDataset>
-					<dataset>
-						<datasetRun subDataset="all_data" uuid="4002613a-ce10-4b4d-b4b6-a58f1a801beb"/>
-					</dataset>
 					<timeSeries>
 						<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
 						<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
@@ -472,9 +485,6 @@ LIMIT 9]]>
 					<chartLegend/>
 				</chart>
 				<pieDataset>
-					<dataset>
-						<datasetRun subDataset="all_data" uuid="3dd8e20d-e6d5-4da9-b89c-65fc477b68f6"/>
-					</dataset>
 					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
 					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
