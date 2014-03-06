@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="102"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -286,7 +286,7 @@
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.country IS NOT NULL
-	THEN T9.country ELSE 'RES'
+	THEN T9.country ELSE 'Rst'
 	END AS _country,
 	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
@@ -298,13 +298,13 @@ LEFT JOIN
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE fecha >= '2014-03-03 00:00:00' AND fecha < '2014-03-04 23:59:00'
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 	GROUP BY country
 	ORDER BY total_d DESC
 	LIMIT 2 /* Cambiar en 9 en PRO */
 ) AS T9
 	ON tcn.mcc = T9.mcc
-WHERE tcn.fecha >= '2014-03-03 00:00:00' AND tcn.fecha < '2014-03-04 23:59:00'
+WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 GROUP BY _country, _day
 ORDER BY _day ) _all
 GROUP BY _all._country]]>
@@ -322,8 +322,14 @@ GROUP BY _all._country]]>
 		<variable name="min_dmin" class="java.lang.Integer" calculation="Lowest">
 			<variableExpression><![CDATA[$F{_MIN}]]></variableExpression>
 		</variable>
-		<variable name="avg" class="java.math.BigDecimal" calculation="Average">
-			<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<variable name="sum_avg" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{_AVG}]]></variableExpression>
+		</variable>
+		<variable name="num_elem" class="java.lang.Integer" calculation="Count">
+			<variableExpression><![CDATA[$F{_AVG}]]></variableExpression>
+		</variable>
+		<variable name="avg" class="java.math.BigDecimal">
+			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="from_date_d" class="java.util.Date">
@@ -335,7 +341,7 @@ GROUP BY _all._country]]>
 	<queryString>
 		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.country IS NOT NULL
-	THEN T9.country ELSE 'RES'
+	THEN T9.country ELSE 'Rst'
 	END AS _country,
 	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
@@ -347,13 +353,13 @@ LEFT JOIN
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE fecha >= '2014-03-03 00:00:00' AND fecha < '2014-03-04 23:59:00'
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 	GROUP BY country
 	ORDER BY total_d DESC
 	LIMIT 2 /* Cambiar en 9 en PRO */
 ) AS T9
 	ON tcn.mcc = T9.mcc
-WHERE tcn.fecha >= '2014-03-03 00:00:00' AND tcn.fecha < '2014-03-04 23:59:00'
+WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 GROUP BY _country, _day
 ORDER BY total DESC, _day DESC]]>
 	</queryString>
@@ -369,7 +375,7 @@ ORDER BY total DESC, _day DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Connected Terminals per Network Daily]]></text>
+				<text><![CDATA[Daily Connected Terminals per Country]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="21" y="-53" width="223" height="20"/>

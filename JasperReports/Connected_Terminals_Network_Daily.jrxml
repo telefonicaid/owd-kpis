@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="148"/>
+	<property name="ireport.y" value="96"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -328,8 +328,14 @@ ORDER BY _alias DESC]]>
 		<variable name="min_dmin" class="java.lang.Integer" calculation="Lowest">
 			<variableExpression><![CDATA[$F{_MIN}]]></variableExpression>
 		</variable>
-		<variable name="avg" class="java.math.BigDecimal" calculation="Average">
-			<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<variable name="sum_avg" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{_AVG}]]></variableExpression>
+		</variable>
+		<variable name="num_elem" class="java.lang.Integer" calculation="Count">
+			<variableExpression><![CDATA[$F{_AVG}]]></variableExpression>
+		</variable>
+		<variable name="avg" class="java.math.BigDecimal">
+			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="from_date_d" class="java.util.Date">
@@ -358,15 +364,15 @@ LEFT JOIN
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
 	LIMIT 2 /* Cambiar en 9 en PRO */
 ) AS T9
 	ON op.alias = T9.alias
-WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 GROUP BY _alias, _day
-ORDER BY _day, tcn.total DESC]]>
+ORDER BY _day ASC, tcn.total DESC]]>
 	</queryString>
 	<field name="_day" class="java.sql.Date"/>
 	<field name="_alias" class="java.lang.String"/>
@@ -380,7 +386,7 @@ ORDER BY _day, tcn.total DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Connected Terminals per Network Daily]]></text>
+				<text><![CDATA[ Daily Connected Terminals per Network]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="21" y="-53" width="223" height="20"/>
@@ -450,7 +456,7 @@ ORDER BY _day, tcn.total DESC]]>
 						<valueExpression><![CDATA[$F{total}]]></valueExpression>
 					</timeSeries>
 				</timeSeriesDataset>
-				<timeSeriesPlot>
+				<timeSeriesPlot isShowLines="true" isShowShapes="true">
 					<plot>
 						<seriesColor seriesOrder="0" color="#19BDC1"/>
 						<seriesColor seriesOrder="1" color="#3366FF"/>
@@ -463,7 +469,7 @@ ORDER BY _day, tcn.total DESC]]>
 						<seriesColor seriesOrder="8" color="#999999"/>
 					</plot>
 					<timeAxisFormat>
-						<axisFormat>
+						<axisFormat verticalTickLabels="false">
 							<labelFont>
 								<font size="8"/>
 							</labelFont>
@@ -473,7 +479,7 @@ ORDER BY _day, tcn.total DESC]]>
 						</axisFormat>
 					</timeAxisFormat>
 					<valueAxisFormat>
-						<axisFormat/>
+						<axisFormat verticalTickLabels="false"/>
 					</valueAxisFormat>
 				</timeSeriesPlot>
 			</timeSeriesChart>
@@ -745,6 +751,11 @@ ORDER BY _day, tcn.total DESC]]>
 				</textElement>
 				<text><![CDATA[Top 8 networks]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="da52d45a-795f-4474-b47e-58d767704ab0" x="626" y="298" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{_day}.getDate()]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
