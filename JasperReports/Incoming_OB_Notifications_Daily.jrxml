@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="240"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -277,88 +277,103 @@
 			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT SUM(total) AS total_all, AVG(total) AS AVG_all, MAX(total) AS MAX_all, MIN(total) AS MIN_all
+			<![CDATA[SELECT _all._alias,MAX(_all.total) AS MAX_all, MIN(_all.total) AS MIN_all, ROUND(AVG(_all.total),2) AS AVG_all, SUM(_all.total) AS total_all
 FROM (
-SELECT
-   SUM(ne.total) as total, DATE(fecha) AS fecha
-FROM kpisdb_rel.notificaciones_entrantes_agr ne
+SELECT DATE(ne.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
+	THEN T9.alias
+	ELSE 'rest'
+	END AS _alias,
+	SUM(ne.total) AS total
+FROM notificaciones_entrantes_ncc_agr AS ne
+INNER JOIN network_country_codes AS ncc
+		ON ne.mcc = ncc.mcc AND ne.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
 LEFT JOIN
 (
-	SELECT DATE(fecha), SUM(total) AS Total, ip
-	FROM kpisdb_rel.notificaciones_entrantes_agr
-	WHERE fecha >= '2014-02-02 00:00:00' AND fecha < '2014-02-11 00:00:00'
-	GROUP BY ip
-	ORDER BY Total DESC
-	LIMIT 1 /*cambiar en PRO a 5*/
-) AS T5
-ON T5.ip = ne.ip
-WHERE ne.fecha >= '2014-02-02 00:00:00' AND ne.fecha < '2014-02-11 00:00:00'
-GROUP BY DATE(fecha)
-ORDER BY fecha ASC) AS agregation]]>
+	SELECT ne.mcc, ne.mnc, SUM(ne.total) AS total_d, ncc.country, op.alias AS alias
+	FROM notificaciones_entrantes_ncc_agr AS ne
+	INNER JOIN network_country_codes AS ncc
+		ON ne.mcc = ncc.mcc AND ne.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 1 /* Cambiar en 9 en PRO */
+) AS T9
+	ON op.alias = T9.alias
+WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+GROUP BY _alias, _day
+) AS _all
+GROUP BY _all._alias
+ORDER BY _alias DESC]]>
 		</queryString>
-		<field name="total_all" class="java.math.BigDecimal"/>
-		<field name="AVG_all" class="java.math.BigDecimal"/>
+		<field name="_alias" class="java.lang.String"/>
 		<field name="MAX_all" class="java.math.BigDecimal"/>
 		<field name="MIN_all" class="java.math.BigDecimal"/>
+		<field name="AVG_all" class="java.math.BigDecimal"/>
+		<field name="total_all" class="java.math.BigDecimal"/>
+		<variable name="num_intervals" class="java.lang.Integer">
+			<variableExpression><![CDATA[(($P{to_date_d}.getTime() - $P{from_date_d}.getTime())/(1000 * 60 * 60 * 24))]]></variableExpression>
+			<initialValueExpression><![CDATA[]]></initialValueExpression>
+		</variable>
 	</subDataset>
+	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new Date() - 1]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[(
-    $P{Cal}.set($P{CurrentDate}.getYear()+1900, $P{CurrentDate}.getMonth(), $P{CurrentDate}.getDate())
-    || $P{Cal}.add(Calendar.DATE, -1)
-    || $P{Cal}.set(Calendar.HOUR_OF_DAY, 23)
-    || $P{Cal}.set(Calendar.MINUTE, 59)
-    || $P{Cal}.set(Calendar.SECOND, 59)
-    || $P{Cal}.set(Calendar.MILLISECOND, 999)
-) ? null : $P{Cal}.getTime()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="Cal" class="java.util.Calendar">
-		<defaultValueExpression><![CDATA[Calendar.getInstance()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="CurrentDate" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT CASE WHEN T5.ip IS NOT NULL
-	THEN ne.ip
-   ELSE 'rest'
-   END AS ip,
-   SUM(ne.total) as total, DATE(fecha) AS fecha
-FROM kpisdb_rel.notificaciones_entrantes_agr ne
+		<![CDATA[SELECT DATE(ne.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
+	THEN T9.alias
+	ELSE 'rest'
+	END AS _alias,
+	SUM(ne.total) AS total
+FROM notificaciones_entrantes_ncc_agr AS ne
+INNER JOIN network_country_codes AS ncc
+		ON ne.mcc = ncc.mcc AND ne.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
 LEFT JOIN
 (
-	SELECT DATE(fecha), SUM(total) AS Total, ip
-	FROM kpisdb_rel.notificaciones_entrantes_agr
+	SELECT ne.mcc, ne.mnc, SUM(ne.total) AS total_d, ncc.country, op.alias AS alias
+	FROM notificaciones_entrantes_ncc_agr AS ne
+	INNER JOIN network_country_codes AS ncc
+		ON ne.mcc = ncc.mcc AND ne.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
 	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
-	GROUP BY ip
-	ORDER BY Total DESC
-	LIMIT 1 /*cambiar en PRO a 5*/
-) AS T5
-ON T5.ip = ne.ip
-WHERE ne.fecha >= $P{from_date_d} AND ne.fecha < $P{to_date_d}
-GROUP BY ip, DATE(fecha)
-ORDER BY fecha ASC, ip DESC]]>
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 1 /* Cambiar en 9 en PRO */
+) AS T9
+	ON op.alias = T9.alias
+WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+GROUP BY _alias, _day
+ORDER BY _day ASC]]>
 	</queryString>
-	<field name="ip" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="_day" class="java.sql.Date"/>
+	<field name="_alias" class="java.lang.String"/>
 	<field name="total" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="fecha" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<variable name="now" class="java.util.Date">
-		<variableExpression><![CDATA[new java.util.Date().getTime()]]></variableExpression>
-		<initialValueExpression><![CDATA[new java.util.Date().getTime()]]></initialValueExpression>
-	</variable>
-	<variable name="overall_ip" class="java.lang.Float" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+	<variable name="num_intervals" class="java.lang.Integer">
+		<variableExpression><![CDATA[(($P{to_date_d}.getTime() - $P{from_date_d}.getTime())/(1000 * 60 * 60 * 24))]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
 	</variable>
 	<background>
 		<band height="457" splitType="Stretch">
+			<image>
+				<reportElement uuid="028bd2e9-538d-4318-81bc-8b1f43030281" x="655" y="-94" width="147" height="71"/>
+				<imageExpression><![CDATA["repo:/components/tid_ffos.gif"]]></imageExpression>
+			</image>
 			<image>
 				<reportElement uuid="1395d0a4-804d-4c2f-a9ac-2e4b1b853a9d" x="697" y="400" width="105" height="57"/>
 				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
@@ -396,7 +411,7 @@ ORDER BY fecha ASC, ip DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Incoming Notifications per IP Daily]]></text>
+				<text><![CDATA[Incoming Notifications per Network Daily]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="49" y="-43" width="219" height="20"/>
@@ -405,10 +420,6 @@ ORDER BY fecha ASC, ip DESC]]>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server ]]></text>
 			</staticText>
-			<image vAlign="Middle">
-				<reportElement uuid="7155a085-0794-4254-a889-1cc9376ff3b7" x="655" y="-92" width="147" height="71"/>
-				<imageExpression><![CDATA["repo:tid_ffos.gif"]]></imageExpression>
-			</image>
 		</band>
 	</background>
 	<summary>
@@ -427,8 +438,8 @@ ORDER BY fecha ASC, ip DESC]]>
 				</chart>
 				<categoryDataset>
 					<categorySeries>
-						<seriesExpression><![CDATA[$F{ip}]]></seriesExpression>
-						<categoryExpression><![CDATA[new SimpleDateFormat("dd-MM-yy").format($F{fecha})]]></categoryExpression>
+						<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
+						<categoryExpression><![CDATA[new SimpleDateFormat("dd-MM-yy").format($F{_day})]]></categoryExpression>
 						<valueExpression><![CDATA[$F{total}]]></valueExpression>
 					</categorySeries>
 				</categoryDataset>
@@ -471,8 +482,8 @@ ORDER BY fecha ASC, ip DESC]]>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<pieDataset>
-					<keyExpression><![CDATA[$F{ip}]]></keyExpression>
-					<valueExpression><![CDATA[$V{overall_ip}]]></valueExpression>
+					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" labelFormat="{2}">
 					<plot orientation="Horizontal">
@@ -492,9 +503,9 @@ ORDER BY fecha ASC, ip DESC]]>
 				<text><![CDATA[Overall top 5 IPs]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement uuid="de861150-cea7-49b6-92ac-65298aeb57b4" key="table 10" style="table 10" x="129" y="351" width="296" height="39"/>
+				<reportElement uuid="a488d2a4-a6f2-4f94-8674-86011c955a36" key="table 10" style="table 10" x="138" y="356" width="360" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="New Dataset 2" uuid="1eab3097-55ed-42b2-8081-f79ff1dc7427">
+					<datasetRun subDataset="New Dataset 2" uuid="739cc274-06b6-4589-8a12-85df17f9544d">
 						<datasetParameter name="from_date_d">
 							<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
 						</datasetParameter>
@@ -503,57 +514,39 @@ ORDER BY fecha ASC, ip DESC]]>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="90" uuid="2fc4837b-6295-4d8c-888a-0243555b9ad2">
+					<jr:column width="70" uuid="959bf7da-b4f9-400e-b3ea-478b5bd704b7">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="be68a849-527a-440b-b568-e8fd90d723a7" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="e331de3c-5370-4d49-b6d5-fa47108c9237" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[From]]></text>
+								<text><![CDATA[Network]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell height="14" rowSpan="1">
+						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="d61b480d-5976-41a5-8e06-ccc9f846e837" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="11930e51-5988-4400-a419-5484a28b57d0" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{_alias}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="90" uuid="dcf27628-9d40-40c0-8272-9f5dacc12d49">
-						<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
-						<jr:columnHeader height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="f3071882-ed64-4b4c-84ef-180a6fb455cc" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[To]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell height="14" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="98318655-b81d-4050-8b07-38e015b69982" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003">
-									<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
-								</reportElement>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="70" uuid="56201032-445b-4e7c-aa34-2fda31b9f584">
+					<jr:column width="70" uuid="be871474-0d40-4cd8-903c-0a964703dee9">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="2f3bd6a1-5020-4694-899e-e0a3925bef6e" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="331d7231-1191-4e33-8032-7e7d6d47ba97" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -561,9 +554,9 @@ ORDER BY fecha ASC, ip DESC]]>
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 10_TD" height="14" rowSpan="1">
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="46108955-9160-400c-89d4-9f80b3fd12f7" mode="Transparent" x="0" y="0" width="70" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="1ac4f94b-4f7f-429d-86e3-f7d5bde59b43" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -572,10 +565,10 @@ ORDER BY fecha ASC, ip DESC]]>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="70" uuid="3b49b3e0-e6e9-4083-92fc-61215865346b">
+					<jr:column width="70" uuid="2013cdb4-4c84-49af-a583-814eb425976e">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="1750cdbd-8196-452f-b01e-f0b1bc3cc796" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="895b950a-23a9-4cd9-9b6a-7f7360f83e4e" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -583,21 +576,21 @@ ORDER BY fecha ASC, ip DESC]]>
 								<text><![CDATA[Daily avg]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 10_TD" height="14" rowSpan="1">
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="###0.00" isBlankWhenNull="false">
-								<reportElement uuid="f669b1c9-273e-481c-b778-85b437abb010" mode="Transparent" x="0" y="0" width="70" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="112cd8c5-7983-4745-ae8c-bc1b0fe49ad4" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{AVG_all}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_all}/$V{num_intervals}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="70" uuid="e8f90237-1841-4c90-97cf-44945811f166">
+					<jr:column width="70" uuid="7c3dadc7-ab6d-4eb0-b89a-c517f924a6a7">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="082246dc-1e02-48c3-936a-7e063c50b4f6" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="bce49050-7c16-4fe7-9f01-4455490b061d" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -605,9 +598,9 @@ ORDER BY fecha ASC, ip DESC]]>
 								<text><![CDATA[Daily max]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 10_TD" height="14" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="f306f819-8a2e-48e0-9654-05a15aed1401" mode="Transparent" x="0" y="0" width="70" height="14" forecolor="#000000" backcolor="#B30003"/>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField isBlankWhenNull="false">
+								<reportElement uuid="db6d8773-3568-4a1f-a1dd-df0ecb30de85" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -616,10 +609,10 @@ ORDER BY fecha ASC, ip DESC]]>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="70" uuid="d87e7190-be31-4242-acbc-ec3f58068e74">
+					<jr:column width="70" uuid="1e3363c0-6274-4b47-b053-0d10fb58df54">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="72129b45-2d7c-4c28-8df7-7dc09d054cc2" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement uuid="07ebcb62-da4c-47bb-8e54-eceabafffdbb" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -627,9 +620,9 @@ ORDER BY fecha ASC, ip DESC]]>
 								<text><![CDATA[Daily min]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table 10_TD" height="14" rowSpan="1">
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="8ce71057-dcf9-4701-a93b-0ca0117fc7b5" mode="Transparent" x="0" y="0" width="70" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="f3d149cd-fc70-4d95-b469-c85fd212e00d" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
