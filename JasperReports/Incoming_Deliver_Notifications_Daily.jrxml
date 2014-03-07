@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="371"/>
+	<property name="ireport.y" value="96"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -303,6 +303,10 @@ ORDER BY typ DESC]]>
 		<field name="MAX_" class="java.math.BigDecimal"/>
 		<field name="AVG_" class="java.math.BigDecimal"/>
 		<field name="MIN_" class="java.math.BigDecimal"/>
+		<variable name="num_intervals" class="java.lang.Integer">
+			<variableExpression><![CDATA[(($P{to_date_d}.getTime() - $P{from_date_d}.getTime())/(1000 * 60 * 60 * 24))]]></variableExpression>
+			<initialValueExpression><![CDATA[]]></initialValueExpression>
+		</variable>
 	</subDataset>
 	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
@@ -318,12 +322,12 @@ ORDER BY typ DESC]]>
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpisdb_rel.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= '2014-02-02 00:00:00' AND fecha < '2014-02-11 00:00:00'
+   WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpisdb_rel.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= '2014-02-02 00:00:00' AND fecha < '2014-02-11 00:00:00'
+    WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
     GROUP BY DATE(fecha))
 ) as t1
 GROUP BY Dt, typ
@@ -473,7 +477,7 @@ ORDER BY Dt ASC, typ DESC]]>
 								<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
 							</box>
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="7101d34b-c331-4c1d-a99e-776e7db6994b" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="7101d34b-c331-4c1d-a99e-776e7db6994b" style="AltBck" x="0" y="0" width="90" height="14"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -660,7 +664,7 @@ ORDER BY Dt ASC, typ DESC]]>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{AVG_}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{SUM_}/$V{num_intervals}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
