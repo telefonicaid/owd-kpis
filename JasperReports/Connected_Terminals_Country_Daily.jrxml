@@ -332,11 +332,14 @@ GROUP BY _all._country]]>
 			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
+	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
