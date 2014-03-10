@@ -544,7 +544,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -561,7 +561,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -597,7 +597,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -614,7 +614,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="e8414f17-4219-4720-b8ad-2babd37c92b2" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="e8414f17-4219-4720-b8ad-2babd37c92b2" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -650,7 +650,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -667,7 +667,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -703,7 +703,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="###0.00" isBlankWhenNull="false">
-								<reportElement uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -720,7 +720,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>

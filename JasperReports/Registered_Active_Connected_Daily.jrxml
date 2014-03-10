@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="384"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -527,7 +527,7 @@ ORDER BY fecha ASC]]>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="f6614cc0-11d6-4018-acc8-5b84e1d3fff7" mode="Transparent" x="176" y="350" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="f6614cc0-11d6-4018-acc8-5b84e1d3fff7" mode="Transparent" x="176" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -542,7 +542,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{reg_total}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="022d0fd3-3608-4d62-a94b-2a201f412691" mode="Transparent" x="176" y="378" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="022d0fd3-3608-4d62-a94b-2a201f412691" mode="Transparent" x="176" y="378" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -557,7 +557,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{act_total}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="b0c857e2-06c2-4804-b72c-55b392c20d13" mode="Transparent" x="176" y="364" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="b0c857e2-06c2-4804-b72c-55b392c20d13" mode="Transparent" x="176" y="364" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -572,7 +572,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{conec_total}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="e9f02b16-3a34-458f-8fa3-4d2e83c4ed0b" mode="Transparent" x="322" y="350" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="e9f02b16-3a34-458f-8fa3-4d2e83c4ed0b" mode="Transparent" x="322" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -587,7 +587,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{reg_max}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="c5c77263-66b2-44cd-8a64-bc0757539245" mode="Transparent" x="322" y="378" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="c5c77263-66b2-44cd-8a64-bc0757539245" mode="Transparent" x="322" y="378" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -602,7 +602,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{act_max}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="ba396b21-1d69-4451-b60a-3ac5d4b8e25d" mode="Transparent" x="322" y="364" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="ba396b21-1d69-4451-b60a-3ac5d4b8e25d" mode="Transparent" x="322" y="364" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -617,7 +617,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{conec_max}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="0ecfc59b-9fcd-40a7-84e2-693eb8ed1cc2" mode="Transparent" x="103" y="350" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="0ecfc59b-9fcd-40a7-84e2-693eb8ed1cc2" mode="Transparent" x="103" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -632,7 +632,7 @@ ORDER BY fecha ASC]]>
 				<text><![CDATA[Registered]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="dc5a2d8f-c21c-4b31-88d1-d0b17cbe911c" mode="Transparent" x="103" y="378" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="dc5a2d8f-c21c-4b31-88d1-d0b17cbe911c" mode="Transparent" x="103" y="378" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -647,7 +647,7 @@ ORDER BY fecha ASC]]>
 				<text><![CDATA[Active]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e1a38d71-2835-4169-815c-5005e0d86e46" mode="Transparent" x="103" y="364" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="e1a38d71-2835-4169-815c-5005e0d86e46" mode="Transparent" x="103" y="364" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -662,7 +662,7 @@ ORDER BY fecha ASC]]>
 				<text><![CDATA[Connected]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="ca6967d1-b05f-401e-b81b-2da73c919951" mode="Transparent" x="395" y="350" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="ca6967d1-b05f-401e-b81b-2da73c919951" mode="Transparent" x="395" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -677,7 +677,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{reg_min}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="6b85d307-7b0d-4203-80f5-bc17ec6e3b15" mode="Transparent" x="395" y="378" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="6b85d307-7b0d-4203-80f5-bc17ec6e3b15" mode="Transparent" x="395" y="378" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -692,7 +692,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{act_min}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="3b138238-8d8c-4216-a844-5279f858d657" mode="Transparent" x="395" y="364" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+				<reportElement uuid="3b138238-8d8c-4216-a844-5279f858d657" mode="Transparent" x="395" y="364" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -707,7 +707,7 @@ ORDER BY fecha ASC]]>
 				<textFieldExpression><![CDATA[$V{conec_min}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement uuid="3f2f2855-a835-4bf8-86ee-e5dc4ad200e3" x="249" y="336" width="294" height="59"/>
+				<reportElement uuid="3f2f2855-a835-4bf8-86ee-e5dc4ad200e3" x="249" y="336" width="294" height="59" forecolor="#666666"/>
 				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
 					<datasetRun subDataset="delat_calc" uuid="34f668e2-f1a3-42a5-b50d-74e4eea43987">
 						<datasetParameter name="from_date_d">
@@ -737,7 +737,7 @@ ORDER BY fecha ASC]]>
 							<text><![CDATA[Period Variaton]]></text>
 						</staticText>
 						<textField>
-							<reportElement uuid="5e47792f-3082-4224-add6-0c310c48e9af" mode="Transparent" x="0" y="14" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="5e47792f-3082-4224-add6-0c310c48e9af" mode="Transparent" x="0" y="14" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -752,7 +752,7 @@ ORDER BY fecha ASC]]>
 							<textFieldExpression><![CDATA[$F{delta_reg}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement uuid="9abfd1e1-1125-4307-b30b-ff39a2410505" mode="Transparent" x="0" y="42" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="9abfd1e1-1125-4307-b30b-ff39a2410505" mode="Transparent" x="0" y="42" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -767,7 +767,7 @@ ORDER BY fecha ASC]]>
 							<textFieldExpression><![CDATA[$F{delta_act}]]></textFieldExpression>
 						</textField>
 						<textField>
-							<reportElement uuid="a8f224f6-ca0c-4a5b-bc07-acbb123bae70" mode="Transparent" x="0" y="28" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="a8f224f6-ca0c-4a5b-bc07-acbb123bae70" mode="Transparent" x="0" y="28" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -797,7 +797,7 @@ ORDER BY fecha ASC]]>
 							<text><![CDATA[Hourly Avg]]></text>
 						</staticText>
 						<textField pattern="###0.00" isBlankWhenNull="false">
-							<reportElement uuid="208ef31a-119b-4a22-a789-c6dac48489f5" mode="Transparent" x="219" y="14" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="208ef31a-119b-4a22-a789-c6dac48489f5" mode="Transparent" x="219" y="14" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -812,7 +812,7 @@ ORDER BY fecha ASC]]>
 							<textFieldExpression><![CDATA[$F{delta_reg}/$P{num_hrs}]]></textFieldExpression>
 						</textField>
 						<textField pattern="###0.00" isBlankWhenNull="false">
-							<reportElement uuid="a2ce5593-91f1-472a-88dc-e50340f62ffc" mode="Transparent" x="219" y="42" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="a2ce5593-91f1-472a-88dc-e50340f62ffc" mode="Transparent" x="219" y="42" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -827,7 +827,7 @@ ORDER BY fecha ASC]]>
 							<textFieldExpression><![CDATA[$F{delta_act}/$P{num_hrs}]]></textFieldExpression>
 						</textField>
 						<textField pattern="###0.00" isBlankWhenNull="false">
-							<reportElement uuid="f767633d-cc1a-4cff-acc5-d26d62731800" mode="Transparent" x="219" y="28" width="73" height="14" forecolor="#000000" backcolor="#B30003"/>
+							<reportElement uuid="f767633d-cc1a-4cff-acc5-d26d62731800" mode="Transparent" x="219" y="28" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 							<box>
 								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>

@@ -466,7 +466,7 @@ ORDER BY typ DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9b3016cd-134f-4a0b-bc7e-0f458bab3ef4" style="AltBck" x="0" y="0" width="90" height="14"/>
+								<reportElement uuid="9b3016cd-134f-4a0b-bc7e-0f458bab3ef4" style="AltBck" x="0" y="0" width="90" height="14" forecolor="#666666"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -509,7 +509,7 @@ ORDER BY typ DESC]]>
 								<rightPen lineColor="#CCCCCC"/>
 							</box>
 							<textField>
-								<reportElement uuid="d7918608-47f8-482a-ae20-6bfed7d55c64" style="AltBck" x="0" y="0" width="90" height="14"/>
+								<reportElement uuid="d7918608-47f8-482a-ae20-6bfed7d55c64" style="AltBck" x="0" y="0" width="90" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -558,7 +558,7 @@ ORDER BY typ DESC]]>
 								<rightPen lineColor="#CCCCCC"/>
 							</box>
 							<textField>
-								<reportElement uuid="d756b740-d695-4e9c-a0c5-b538ea4d2889" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<reportElement uuid="d756b740-d695-4e9c-a0c5-b538ea4d2889" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -600,7 +600,7 @@ ORDER BY typ DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
 							<textField>
-								<reportElement uuid="053f1f9c-3186-4a99-b715-3fd7233be04e" style="AltBck" x="0" y="0" width="73" height="14"/>
+								<reportElement uuid="053f1f9c-3186-4a99-b715-3fd7233be04e" style="AltBck" x="0" y="0" width="73" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -642,7 +642,7 @@ ORDER BY typ DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
 							<textField pattern="###0.00">
-								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -677,7 +677,7 @@ ORDER BY typ DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
 							<textField>
-								<reportElement uuid="5495827e-5935-4e85-8b18-63c0b9941461" style="AltBck" x="0" y="0" width="73" height="14"/>
+								<reportElement uuid="5495827e-5935-4e85-8b18-63c0b9941461" style="AltBck" x="0" y="0" width="73" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -712,7 +712,7 @@ ORDER BY typ DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
 							<textField>
-								<reportElement uuid="986f70d6-7861-44d9-83ae-f1d294e07cfc" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<reportElement uuid="986f70d6-7861-44d9-83ae-f1d294e07cfc" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
