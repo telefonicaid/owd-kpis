@@ -15,11 +15,7 @@ import splunklib.results as results
 import ConfigParser
 from apilib import *
 
-#from pymongo import MongoClient
-# import argparse
-
 CONFIG_FILE='api-extractor.cfg'
-
 
 if __name__ == '__main__':
 

@@ -110,7 +110,11 @@ def getSearch(search,service):
         sleep(2)
 
     # Display the search results now that the job is done
-    jobresults = job.results()
+    try:
+        jobresults = job.results()
+    except:
+        logCreator('ERROR','No valid answer from Splunk (Invalid licence?)')
+        exit(1)
 
     #print jobresults
 
