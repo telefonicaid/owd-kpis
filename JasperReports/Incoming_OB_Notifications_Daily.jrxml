@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -374,10 +374,6 @@ ORDER BY _day ASC]]>
 				<reportElement uuid="028bd2e9-538d-4318-81bc-8b1f43030281" x="655" y="-94" width="147" height="71"/>
 				<imageExpression><![CDATA["repo:/components/tid_ffos.gif"]]></imageExpression>
 			</image>
-			<image>
-				<reportElement uuid="1395d0a4-804d-4c2f-a9ac-2e4b1b853a9d" x="697" y="400" width="105" height="57"/>
-				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
-			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
 				<reportElement uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7" mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -420,6 +416,10 @@ ORDER BY _day ASC]]>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server ]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="778599c2-95c8-4eb3-9352-d187a3794f1a" x="619" y="333" width="100" height="100"/>
+				<imageExpression><![CDATA["repo:/components/foxsit.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</background>
 	<summary>
@@ -443,7 +443,7 @@ ORDER BY _day ASC]]>
 						<valueExpression><![CDATA[$F{total}]]></valueExpression>
 					</categorySeries>
 				</categoryDataset>
-				<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+				<barPlot isShowLabels="false" isShowTickLabels="true" isShowTickMarks="false">
 					<plot labelRotation="-30.0">
 						<seriesColor seriesOrder="0" color="#999999"/>
 						<seriesColor seriesOrder="1" color="#B30003"/>
@@ -527,7 +527,7 @@ ORDER BY _day ASC]]>
 						</jr:columnHeader>
 						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="11930e51-5988-4400-a419-5484a28b57d0" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="11930e51-5988-4400-a419-5484a28b57d0" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -556,7 +556,7 @@ ORDER BY _day ASC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="1ac4f94b-4f7f-429d-86e3-f7d5bde59b43" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="1ac4f94b-4f7f-429d-86e3-f7d5bde59b43" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -578,7 +578,7 @@ ORDER BY _day ASC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="###0.00" isBlankWhenNull="false">
-								<reportElement uuid="112cd8c5-7983-4745-ae8c-bc1b0fe49ad4" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="112cd8c5-7983-4745-ae8c-bc1b0fe49ad4" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -600,7 +600,7 @@ ORDER BY _day ASC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField isBlankWhenNull="false">
-								<reportElement uuid="db6d8773-3568-4a1f-a1dd-df0ecb30de85" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="db6d8773-3568-4a1f-a1dd-df0ecb30de85" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -622,7 +622,7 @@ ORDER BY _day ASC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="f3d149cd-fc70-4d95-b469-c85fd212e00d" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#000000" backcolor="#B30003"/>
+								<reportElement uuid="f3d149cd-fc70-4d95-b469-c85fd212e00d" mode="Transparent" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
