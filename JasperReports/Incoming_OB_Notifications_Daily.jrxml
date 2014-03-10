@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="39"/>
+	<property name="ireport.y" value="192"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -270,19 +270,13 @@
 		<parameter name="to_date_d" class="java.util.Date" isForPrompting="false">
 			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
 		</parameter>
-		<parameter name="Cal" class="java.util.Calendar">
-			<defaultValueExpression><![CDATA[Calendar.getInstance()]]></defaultValueExpression>
-		</parameter>
-		<parameter name="CurrentDate" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
-		</parameter>
 		<queryString>
 			<![CDATA[SELECT _all._alias,MAX(_all.total) AS MAX_all, MIN(_all.total) AS MIN_all, ROUND(AVG(_all.total),2) AS AVG_all, SUM(_all.total) AS total_all
 FROM (
 SELECT DATE(ne.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
-	ELSE 'rest'
+	ELSE 'Others'
 	END AS _alias,
 	SUM(ne.total) AS total
 FROM notificaciones_entrantes_ncc_agr AS ne
@@ -333,7 +327,7 @@ ORDER BY _alias DESC]]>
 		<![CDATA[SELECT DATE(ne.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
-	ELSE 'rest'
+	ELSE 'Others'
 	END AS _alias,
 	SUM(ne.total) AS total
 FROM notificaciones_entrantes_ncc_agr AS ne
@@ -407,7 +401,7 @@ ORDER BY _day ASC]]>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Incoming Notifications per Network Daily]]></text>
+				<text><![CDATA[Daily Incoming Notifications per Network]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="49" y="-43" width="219" height="20"/>
@@ -425,13 +419,13 @@ ORDER BY _day ASC]]>
 	<summary>
 		<band height="457">
 			<staticText>
-				<reportElement uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b" x="55" y="6" width="139" height="20"/>
+				<reportElement uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b" x="55" y="6" width="425" height="20"/>
 				<textElement/>
-				<text><![CDATA[Top 5 IPs]]></text>
+				<text><![CDATA[Number of notifications destined for terminals of those networks]]></text>
 			</staticText>
 			<stackedBarChart>
 				<chart>
-					<reportElement uuid="9f687183-f95b-42f5-986e-d4c69b794c25" x="101" y="40" width="489" height="277"/>
+					<reportElement uuid="9f687183-f95b-42f5-986e-d4c69b794c25" x="99" y="40" width="489" height="277"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -472,11 +466,11 @@ ORDER BY _day ASC]]>
 			<staticText>
 				<reportElement uuid="e5db01aa-b82e-4d53-b0e5-13863b2a4e27" x="55" y="321" width="126" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<text><![CDATA[Stats]]></text>
+				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="590" y="79" width="202" height="168" forecolor="#000000" backcolor="#FFFFFF"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="593" y="79" width="202" height="168" forecolor="#000000" backcolor="#FFFFFF"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend position="Bottom"/>
@@ -485,7 +479,7 @@ ORDER BY _day ASC]]>
 					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
 					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
-				<piePlot isShowLabels="true" labelFormat="{2}">
+				<piePlot isShowLabels="true" labelFormat="{2}" legendLabelFormat="{0}">
 					<plot orientation="Horizontal">
 						<seriesColor seriesOrder="0" color="#999999"/>
 						<seriesColor seriesOrder="1" color="#B30003"/>
@@ -497,11 +491,6 @@ ORDER BY _day ASC]]>
 					<itemLabel/>
 				</piePlot>
 			</pieChart>
-			<staticText>
-				<reportElement uuid="a5b7ffd5-4dd9-403b-8f64-f2a620e333c2" x="609" y="6" width="139" height="20"/>
-				<textElement/>
-				<text><![CDATA[Overall top 5 IPs]]></text>
-			</staticText>
 			<componentElement>
 				<reportElement uuid="a488d2a4-a6f2-4f94-8674-86011c955a36" key="table 10" style="table 10" x="138" y="356" width="360" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">

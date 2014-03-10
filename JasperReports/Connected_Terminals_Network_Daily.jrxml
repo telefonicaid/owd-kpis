@@ -282,12 +282,12 @@
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total
+			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total, IF (_all._alias = 'Others',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
-	ELSE 'rest'
+	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
@@ -313,7 +313,7 @@ WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
 GROUP BY _alias, _day
 ORDER BY _day, tcn.total DESC) _all
 GROUP BY _all._alias
-ORDER BY _alias DESC]]>
+ORDER BY _id ASC]]>
 		</queryString>
 		<field name="_alias" class="java.lang.String"/>
 		<field name="_MAX" class="java.math.BigDecimal"/>
@@ -322,6 +322,7 @@ ORDER BY _alias DESC]]>
 		<field name="total" class="java.math.BigDecimal">
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
+		<field name="_id" class="java.lang.Integer"/>
 		<variable name="max_dmax" class="java.lang.Integer" calculation="Highest">
 			<variableExpression><![CDATA[$F{_MAX}]]></variableExpression>
 		</variable>
@@ -351,7 +352,7 @@ ORDER BY _alias DESC]]>
 		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
-	ELSE 'rest'
+	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
 FROM terminales_con_registros_agr as tcn
@@ -441,7 +442,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 			<staticText>
 				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="46" y="329" width="126" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Stats]]></text>
+				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<timeSeriesChart>
 				<chart>
@@ -487,8 +488,8 @@ ORDER BY _day ASC, tcn.total DESC]]>
 				</timeSeriesPlot>
 			</timeSeriesChart>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="168"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="550" y="73" width="224" height="168"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -497,7 +498,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
 					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
-				<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}">
+				<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
 					<plot>
 						<seriesColor seriesOrder="0" color="#19BDC1"/>
 						<seriesColor seriesOrder="1" color="#3366FF"/>
@@ -556,7 +557,7 @@ ORDER BY _day ASC, tcn.total DESC]]>
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[Overall    ]]></text>
+								<text><![CDATA[Total    ]]></text>
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
@@ -739,20 +740,12 @@ ORDER BY _day ASC, tcn.total DESC]]>
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement uuid="aeb600ec-f339-4290-9ce7-7ab929bdd709" mode="Transparent" x="572" y="14" width="144" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="493" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Overall top 8 networks]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="128" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Top 8 networks]]></text>
+				<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
 			</staticText>
 		</band>
 	</summary>
