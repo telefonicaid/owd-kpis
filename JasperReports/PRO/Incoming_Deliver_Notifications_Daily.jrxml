@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
-	<property name="ireport.x" value="39"/>
-	<property name="ireport.y" value="597"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -308,26 +308,29 @@ ORDER BY typ DESC]]>
 			<initialValueExpression><![CDATA[]]></initialValueExpression>
 		</variable>
 	</subDataset>
-	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT *
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
     GROUP BY DATE(fecha))
 ) as t1
 GROUP BY Dt, typ
@@ -350,10 +353,6 @@ ORDER BY Dt ASC, typ DESC]]>
 	</variable>
 	<background>
 		<band height="443" splitType="Stretch">
-			<image>
-				<reportElement uuid="e5abe330-2bd2-4a2d-b407-a77d8c0ea4e1" x="611" y="-104" width="145" height="71"/>
-				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="21" y="-104" width="390" height="31"/>
 				<textElement verticalAlignment="Middle">
@@ -368,6 +367,10 @@ ORDER BY Dt ASC, typ DESC]]>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server]]></text>
 			</staticText>
+			<image vAlign="Middle">
+				<reportElement uuid="279a0bed-ef7f-4342-9692-886e36e7c07a" x="611" y="-104" width="145" height="71"/>
+				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
+			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
 				<reportElement uuid="cc6c5e56-b570-402e-83a8-4f95249d2bba" mode="Transparent" x="21" y="-73" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">

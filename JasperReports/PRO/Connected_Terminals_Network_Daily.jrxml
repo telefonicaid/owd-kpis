@@ -313,7 +313,7 @@ WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
 GROUP BY _alias, _day
 ORDER BY _day, tcn.total DESC) _all
 GROUP BY _all._alias
-ORDER BY _id ASC, total DESC]]>
+ORDER BY _id ASC]]>
 		</queryString>
 		<field name="_alias" class="java.lang.String"/>
 		<field name="_MAX" class="java.math.BigDecimal"/>
@@ -339,19 +339,20 @@ ORDER BY _id ASC, total DESC]]>
 			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-30").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT *, IF (tbl._alias = 'Others',1,0) AS _id
-FROM (
-SELECT DATE(tcn.fecha) AS _day,
+		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
 	ELSE 'Others'
@@ -378,8 +379,7 @@ LEFT JOIN
 	ON op.alias = T9.alias
 WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
 GROUP BY _alias, _day
-ORDER BY _day ASC, tcn.total DESC) AS tbl
-ORDER BY _id, total DESC]]>
+ORDER BY _day ASC, tcn.total DESC]]>
 	</queryString>
 	<field name="_day" class="java.sql.Date"/>
 	<field name="_alias" class="java.lang.String"/>

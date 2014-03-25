@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="96"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -280,7 +280,7 @@ LEFT JOIN
 	WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
 	GROUP BY ip
 	ORDER BY Total DESC
-	LIMIT 2 /*cambiar en PRO a 5*/
+	LIMIT 5 /*cambiar en PRO a 5*/
 ) AS T5
 ON T5.ip = ne.ip
 WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}
@@ -312,14 +312,14 @@ ORDER BY _id, ip]]>
 			<variableExpression><![CDATA[$F{total_all}/$V{num_intervals}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="last_day" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="From_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getStart().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getStart().getTime())]]></defaultValueExpression>
 	</parameter>
 	<parameter name="To_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getEnd().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getEnd().getTime())]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT *, IF (tbl._ip = 'Others',1,0) AS _id
@@ -339,7 +339,7 @@ LEFT JOIN
 	WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
 	GROUP BY ip
 	ORDER BY Total DESC
-	LIMIT 2 /*cambiar en PRO a 5*/
+	LIMIT 5 /*cambiar en PRO a 5*/
 ) AS T5
 ON T5.ip = ne.ip
 WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}

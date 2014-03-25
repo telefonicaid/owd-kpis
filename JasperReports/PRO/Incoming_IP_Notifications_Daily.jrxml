@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="255"/>
-	<property name="ireport.y" value="910"/>
+	<property name="ireport.zoom" value="0.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="101"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -271,7 +271,7 @@
 			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT SUM(agr.total) total_all, MAX(agr.total) AS MAX_all, MIN(agr.total) AS MIN_all, IF (sa.alias IS NULL,agr._ip,sa.alias) AS ip, IF (agr._ip = 'Others',1,0) AS _id
+			<![CDATA[SELECT SUM(agr.total) total_all, MAX(agr.total) AS MAX_all, MIN(agr.total) AS MIN_all, IF (sa.alias IS NULL,agr._ip,sa.alias) AS _Alias, IF (agr._ip = 'Others',1,0) AS _id
 FROM (
 SELECT DATE(ne.fecha) AS fecha,
 	CASE WHEN T5.ip IS NOT NULL
@@ -294,15 +294,13 @@ GROUP BY _ip, ne.fecha
 ORDER BY fecha, _ip) AS agr
 LEFT JOIN kpis_db.alias_ip_servidores_aplicaciones AS sa
 	ON agr._ip = sa.ip
-GROUP BY agr._ip
+GROUP BY _Alias
 ORDER BY _id, total_all DESC]]>
 		</queryString>
 		<field name="total_all" class="java.math.BigDecimal"/>
 		<field name="MAX_all" class="java.math.BigDecimal"/>
 		<field name="MIN_all" class="java.math.BigDecimal"/>
-		<field name="ip" class="java.lang.String">
-			<fieldDescription><![CDATA[]]></fieldDescription>
-		</field>
+		<field name="_Alias" class="java.lang.String"/>
 		<field name="_id" class="java.lang.Integer"/>
 		<variable name="num_intervals" class="java.lang.Integer">
 			<variableExpression><![CDATA[(($P{to_date_d}.getTime() - $P{from_date_d}.getTime())/(1000 * 60 * 60 * 24))+1]]></variableExpression>
@@ -324,49 +322,52 @@ ORDER BY _id, total_all DESC]]>
 			<variableExpression><![CDATA[$V{avg}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
 	</parameter>
-	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
-	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
+	<parameter name="from_date_d" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date_d" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT tbl.fecha, SUM(tbl.total) AS total, IF (tbl._ip = 'Others',1,0) AS _id, IF (sa.alias IS NULL,tbl._ip,sa.alias) AS _alias, tbl._ip
+		<![CDATA[SELECT *,  IF (tbl._ip = 'Others',1,0) AS _id
 FROM(
 SELECT DATE(ne.fecha) AS fecha,
-	CASE WHEN T5.ip IS NOT NULL
-	THEN T5.ip
-	ELSE 'Others' END AS _ip,
-   SUM(ne.total) as total
+   	SUM(ne.total) as total,
+		IF (sa.alias IS NULL,(CASE WHEN T5.ip IS NOT NULL
+		THEN T5.ip
+		ELSE 'Others' END),sa.alias) AS _ip
 FROM kpis_db.notificaciones_entrantes_agr ne
+LEFT JOIN kpis_db.alias_ip_servidores_aplicaciones AS sa
+	ON ne.ip = sa.ip
 LEFT JOIN
 (
 	SELECT SUM(total) AS Total, ip
 	FROM kpis_db.notificaciones_entrantes_agr
-	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+	WHERE fecha >= '2014-03-17 00:00:00' AND fecha <= '2014-03-23 23:59:59'
 	GROUP BY ip
 	ORDER BY Total DESC
 	LIMIT 5 /*cambiar en PRO a 5*/
 ) AS T5
 ON T5.ip = ne.ip
-WHERE ne.fecha >= $P{from_date_d} AND ne.fecha <= $P{to_date_d}
-GROUP BY _ip, ne.fecha) AS tbl
-LEFT JOIN kpis_db.alias_ip_servidores_aplicaciones AS sa
-	ON tbl._ip = sa.ip
-GROUP BY _ip, fecha
-ORDER BY _id DESC, fecha, total DESC]]>
+WHERE ne.fecha >= '2014-03-17 00:00:00' AND ne.fecha <= '2014-03-23 23:59:59'
+GROUP BY _ip, DATE(fecha)
+ORDER BY _ip DESC) AS tbl
+ORDER BY fecha, _id DESC]]>
 	</queryString>
 	<field name="fecha" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[viene de notificaciones_entrantes]]></fieldDescription>
 	</field>
 	<field name="total" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="_id" class="java.lang.Integer"/>
-	<field name="_alias" class="java.lang.String"/>
+	<field name="_ip" class="java.lang.String"/>
+	<field name="_id" class="java.lang.Long"/>
 	<variable name="overall_ip" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
@@ -440,7 +441,7 @@ ORDER BY _id DESC, fecha, total DESC]]>
 				</chart>
 				<categoryDataset>
 					<categorySeries>
-						<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
+						<seriesExpression><![CDATA[$F{_ip}]]></seriesExpression>
 						<categoryExpression><![CDATA[new SimpleDateFormat("dd-MM-yy").format($F{fecha})]]></categoryExpression>
 						<valueExpression><![CDATA[$F{total}]]></valueExpression>
 					</categorySeries>
@@ -484,8 +485,8 @@ ORDER BY _id DESC, fecha, total DESC]]>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<pieDataset>
-					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
-					<valueExpression><![CDATA[$V{overall_ip}]]></valueExpression>
+					<keyExpression><![CDATA[$F{_ip}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" labelFormat="{2}">
 					<plot orientation="Horizontal">
@@ -560,7 +561,7 @@ ORDER BY _id DESC, fecha, total DESC]]>
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{ip}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{_Alias}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

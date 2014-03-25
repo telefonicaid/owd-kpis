@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="111"/>
-	<property name="ireport.y" value="261"/>
+	<property name="ireport.x" value="48"/>
+	<property name="ireport.y" value="96"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -306,14 +306,14 @@ FROM
 		<field name="delta_act" class="java.math.BigInteger"/>
 		<field name="delta_con" class="java.math.BigInteger"/>
 	</subDataset>
-	<parameter name="last_day" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="From_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getStart().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getStart().getTime())]]></defaultValueExpression>
 	</parameter>
 	<parameter name="To_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getEnd().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getEnd().getTime())]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT fecha, registrados, conectados, activos
@@ -333,22 +333,13 @@ ORDER BY fecha ASC]]>
 	<field name="activos" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="reg_total" class="java.lang.Long">
+	<variable name="reg_total" class="java.lang.Long" calculation="Highest">
 		<variableExpression><![CDATA[$F{registrados}]]></variableExpression>
 	</variable>
-	<variable name="act_total" class="java.lang.Long">
+	<variable name="act_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{activos}]]></variableExpression>
 	</variable>
-	<variable name="conec_total" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{conectados}]]></variableExpression>
-	</variable>
-	<variable name="reg_avg" class="java.lang.Long" calculation="Average">
-		<variableExpression><![CDATA[$F{registrados}]]></variableExpression>
-	</variable>
-	<variable name="act_avg" class="java.lang.Long" calculation="Average">
-		<variableExpression><![CDATA[$F{activos}]]></variableExpression>
-	</variable>
-	<variable name="conec_avg" class="java.lang.Long" calculation="Average">
+	<variable name="conec_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{conectados}]]></variableExpression>
 	</variable>
 	<variable name="reg_max" class="java.lang.Long" calculation="Highest">

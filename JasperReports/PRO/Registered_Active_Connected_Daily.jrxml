@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="165"/>
+	<property name="ireport.x" value="71"/>
+	<property name="ireport.y" value="192"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -289,18 +289,18 @@ IFNULL((_last.activos_agr - _first.activos_agr),0) AS delta_act,
 IFNULL((_last.conectados_agr - _first.conectados_agr),0) AS delta_con
 FROM
 (
-  (SELECT ROUND(AVG(IFNULL(registrados,0)),0) AS registrados_agr, SUM(IFNULL(conectados,0)) AS conectados_agr,
+  (SELECT ROUND(AVG(IFNULL(registrados,0)),0) AS registrados_agr, ROUND(AVG(IFNULL(conectados,0)),0) AS conectados_agr,
  ROUND(AVG(IFNULL(activos,0)),0) AS activos_agr
 FROM kpis_db.terminales_agr
-WHERE fecha >= '2014-03-18 00:00:00' AND fecha <= '2014-03-19 23:59:59'
+WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY DATE(fecha)
 ORDER BY fecha DESC
   LIMIT 1) _last,
 
-  (SELECT ROUND(AVG(IFNULL(registrados,0)),0) AS registrados_agr, SUM(IFNULL(conectados,0)) AS conectados_agr,
+  (SELECT ROUND(AVG(IFNULL(registrados,0)),0) AS registrados_agr, ROUND(AVG(IFNULL(conectados,0)),0) AS conectados_agr,
  ROUND(AVG(IFNULL(activos,0)),0) AS activos_agr
 FROM kpis_db.terminales_agr
-WHERE fecha >= '2014-03-18 00:00:00' AND fecha <= '2014-03-19 23:59:59'
+WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY DATE(fecha)
 ORDER BY fecha ASC
   LIMIT 1) AS _first
@@ -310,14 +310,20 @@ ORDER BY fecha ASC
 		<field name="delta_act" class="java.math.BigDecimal"/>
 		<field name="delta_con" class="java.math.BigDecimal"/>
 	</subDataset>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-30").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT DATE(fecha) AS _Day, ROUND(AVG(registrados),0) AS registrados_agr, SUM(conectados) AS conectados_agr,
+		<![CDATA[SELECT DATE(fecha) AS _Day, ROUND(AVG(registrados),0) AS registrados_agr, ROUND(AVG(conectados),0) AS conectados_agr,
  ROUND(AVG(activos),0) AS activos_agr
 FROM kpis_db.terminales_agr
 WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
@@ -328,13 +334,13 @@ ORDER BY fecha ASC]]>
 	<field name="registrados_agr" class="java.math.BigDecimal"/>
 	<field name="conectados_agr" class="java.math.BigDecimal"/>
 	<field name="activos_agr" class="java.math.BigDecimal"/>
-	<variable name="reg_total" class="java.lang.Long">
+	<variable name="reg_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{registrados_agr}]]></variableExpression>
 	</variable>
-	<variable name="act_total" class="java.lang.Long" calculation="Sum">
+	<variable name="act_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{activos_agr}]]></variableExpression>
 	</variable>
-	<variable name="conec_total" class="java.lang.Long" calculation="Sum">
+	<variable name="conec_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{conectados_agr}]]></variableExpression>
 	</variable>
 	<variable name="reg_max" class="java.lang.Long" calculation="Highest">
@@ -525,21 +531,6 @@ Connected terminal
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement uuid="f6614cc0-11d6-4018-acc8-5b84e1d3fff7" mode="Transparent" x="176" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{reg_total}]]></textFieldExpression>
-			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement uuid="022d0fd3-3608-4d62-a94b-2a201f412691" mode="Transparent" x="176" y="378" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
 				<box>
@@ -858,6 +849,21 @@ Connected terminal
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="5b19984a-b539-4e14-ac98-f5380a304382" mode="Transparent" x="176" y="350" width="73" height="14" forecolor="#666666" backcolor="#B30003"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{registrados_agr}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="115"/>
+	<property name="ireport.y" value="268"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -285,12 +285,12 @@
 			<![CDATA[SELECT typ, SUM(Totales) AS total, ROUND(AVG(Totales),2) AS AVG_, MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
 FROM(
 	(SELECT fecha, SUM(total) AS Totales, "Delivered" AS typ
-   FROM kpisdb_rel.notificaciones_entregadas_agr AS ndel
+   FROM kpis_db.notificaciones_entregadas_agr AS ndel
    WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
 	GROUP BY fecha)
 	UNION
    (SELECT fecha, SUM(total) AS Totales, "Incoming" AS typ
-    FROM kpisdb_rel.notificaciones_entrantes_agr AS ninc
+    FROM kpis_db.notificaciones_entrantes_agr AS ninc
     WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
     GROUP BY fecha)
     ) AS incdel
@@ -303,26 +303,26 @@ ORDER BY typ DESC]]>
 		<field name="MAX_" class="java.math.BigDecimal"/>
 		<field name="MIN_" class="java.math.BigDecimal"/>
 	</subDataset>
-	<parameter name="last_day" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="From_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getStart().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getStart().getTime())]]></defaultValueExpression>
 	</parameter>
 	<parameter name="To_date" class="java.sql.Timestamp">
-		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getEnd().getTime())]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getEnd().getTime())]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT *
 FROM (
    (SELECT fecha AS Dt, total AS Totales, "Delivered" AS typ
-   FROM kpisdb_rel.notificaciones_entregadas_agr AS ndel
+   FROM kpis_db.notificaciones_entregadas_agr AS ndel
    WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
    GROUP BY Dt
    )
   UNION
    (SELECT fecha AS Dt, SUM(total) AS Totales, "Incoming" AS typ
-    FROM kpisdb_rel.notificaciones_entrantes_agr AS ninc
+    FROM kpis_db.notificaciones_entrantes_agr AS ninc
     WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
     GROUP BY Dt
     )
@@ -362,7 +362,7 @@ ORDER BY typ DESC]]>
 			</staticText>
 			<image vAlign="Middle">
 				<reportElement uuid="279a0bed-ef7f-4342-9692-886e36e7c07a" x="611" y="-104" width="145" height="71"/>
-				<imageExpression><![CDATA["repo:tid_ffos.gif"]]></imageExpression>
+				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
 				<reportElement uuid="cc6c5e56-b570-402e-83a8-4f95249d2bba" mode="Transparent" x="21" y="-73" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -374,7 +374,7 @@ ORDER BY typ DESC]]>
 			</textField>
 			<image>
 				<reportElement uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4" x="697" y="386" width="105" height="57"/>
-				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
 				<reportElement uuid="2cd30490-5008-4754-b75e-a17fc8c60fc0" mode="Transparent" x="108" y="-73" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">

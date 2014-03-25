@@ -405,7 +405,7 @@ ORDER BY fecha, _id, _ip]]>
 			</staticText>
 			<image vAlign="Middle">
 				<reportElement uuid="7155a085-0794-4254-a889-1cc9376ff3b7" x="655" y="-92" width="147" height="71"/>
-				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
+				<imageExpression><![CDATA["repo:tid_ffos.gif"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -486,7 +486,7 @@ ORDER BY fecha, _id, _ip]]>
 			</pieChart>
 			<image>
 				<reportElement uuid="1395d0a4-804d-4c2f-a9ac-2e4b1b853a9d" x="697" y="400" width="105" height="57"/>
-				<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
 			</image>
 			<componentElement>
 				<reportElement uuid="96633929-38a1-4a08-9cc1-02316d3c0100" key="table 10" style="AltBck" x="154" y="330" width="360" height="50" backcolor="#FFFFFF"/>
