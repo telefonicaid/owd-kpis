@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
+	<property name="ireport.zoom" value="0.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
+	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#FF4500">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#FFD1BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#FF6347">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#FFC9BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#FF4500">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#FFD1BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TH" mode="Opaque" backcolor="#FF4500">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_CH" mode="Opaque" backcolor="#FFD1BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TH" mode="Opaque" backcolor="#FF8C00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_CH" mode="Opaque" backcolor="#FFE2BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 10_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="AltBck" forecolor="#000000" backcolor="#B30003">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}.intValue() % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFFE7">
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineColor="#CCCCCC"/>
+					<leftPen lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineColor="#CCCCCC"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<style name="table 11">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 11_TH" mode="Transparent" backcolor="#FF4500">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 11_CH" mode="Opaque" backcolor="#FFD1BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineColor="#CCCCCC"/>
+			<leftPen lineColor="#CCCCCC"/>
+			<bottomPen lineColor="#CCCCCC"/>
+			<rightPen lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="table 11_TD" mode="Transparent" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineColor="#CCCCCC"/>
+			<leftPen lineColor="#CCCCCC"/>
+			<bottomPen lineColor="#CCCCCC"/>
+			<rightPen lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 1" uuid="eda2c39d-4358-4979-9d9f-f3387f27db91">
+		<parameter name="from_date_d" class="java.util.Date" isForPrompting="false">
+			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT typ, SUM(Totales) AS SUM_, MAX(Totales) AS MAX_, ROUND(AVG(Totales),2) AS AVG_,
+MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
+FROM (
+   (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
+   FROM kpis_db.notificaciones_entregadas_agr AS ndel
+   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+   GROUP BY DATE(fecha))
+  UNION
+   (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
+    FROM kpis_db.notificaciones_entrantes_agr AS ninc
+    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+    GROUP BY DATE(fecha))
+) as t1
+GROUP BY typ
+ORDER BY typ DESC]]>
+		</queryString>
+		<field name="typ" class="java.lang.String"/>
+		<field name="SUM_" class="java.math.BigDecimal"/>
+		<field name="MAX_" class="java.math.BigDecimal"/>
+		<field name="AVG_" class="java.math.BigDecimal"/>
+		<field name="MIN_" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="last_week" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{last_week}.getStart()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{last_week}.getEnd()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT *
+FROM (
+   (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
+   FROM kpis_db.notificaciones_entregadas_agr AS ndel
+   WHERE fecha >= '2014-02-02 00:00:00' AND fecha < '2014-02-11 00:00:00'
+   GROUP BY DATE(fecha))
+  UNION
+   (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
+    FROM kpis_db.notificaciones_entrantes_agr AS ninc
+    WHERE fecha >= '2014-02-02 00:00:00' AND fecha < '2014-02-11 00:00:00'
+    GROUP BY DATE(fecha))
+) as t1
+GROUP BY Dt, typ
+ORDER BY Dt ASC, typ DESC]]>
+	</queryString>
+	<field name="Dt" class="java.sql.Date"/>
+	<field name="Totales" class="java.math.BigDecimal"/>
+	<field name="typ" class="java.lang.String"/>
+	<variable name="overall" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
+	</variable>
+	<variable name="avg" class="java.lang.Float" calculation="Average">
+		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
+	</variable>
+	<variable name="min" class="java.lang.Integer" calculation="Lowest">
+		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
+	</variable>
+	<variable name="max" class="java.lang.Integer" calculation="Highest">
+		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
+	</variable>
+	<background>
+		<band height="443" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="21" y="-104" width="390" height="31"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OWD PNS Global Wakeup API usage Hourly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="21" y="-53" width="223" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[OWD Push Notification Server]]></text>
+			</staticText>
+			<image vAlign="Middle">
+				<reportElement uuid="279a0bed-ef7f-4342-9692-886e36e7c07a" x="611" y="-104" width="145" height="71"/>
+				<imageExpression><![CDATA["repo:tid_ffos.gif"]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="cc6c5e56-b570-402e-83a8-4f95249d2bba" mode="Transparent" x="21" y="-73" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4" x="697" y="386" width="105" height="57"/>
+				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="2cd30490-5008-4754-b75e-a17fc8c60fc0" mode="Transparent" x="108" y="-73" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f404e112-c964-403b-8c0f-fbdbde0bbfcb" mode="Transparent" x="95" y="-73" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[to]]></text>
+			</staticText>
+		</band>
+	</background>
+	<summary>
+		<band height="443">
+			<staticText>
+				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="69" y="305" width="126" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Stats]]></text>
+			</staticText>
+			<timeSeriesChart>
+				<chart>
+					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="117" y="25" width="540" height="275" isRemoveLineWhenBlank="true">
+						<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
+					</reportElement>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<timeSeriesDataset>
+					<timeSeries>
+						<seriesExpression><![CDATA[$F{typ}]]></seriesExpression>
+						<timePeriodExpression><![CDATA[$F{Dt}]]></timePeriodExpression>
+						<valueExpression><![CDATA[$F{Totales}]]></valueExpression>
+					</timeSeries>
+				</timeSeriesDataset>
+				<timeSeriesPlot>
+					<plot>
+						<seriesColor seriesOrder="0" color="#B30003"/>
+						<seriesColor seriesOrder="1" color="#E85A06"/>
+					</plot>
+					<timeAxisFormat>
+						<axisFormat>
+							<labelFont>
+								<font size="8"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="8"/>
+							</tickLabelFont>
+						</axisFormat>
+					</timeAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</timeSeriesPlot>
+			</timeSeriesChart>
+			<componentElement>
+				<reportElement uuid="d2c308eb-b7be-4c8d-a148-2e0c74479ae1" key="table 11" style="table 11" x="126" y="330" width="531" height="50" forecolor="#CCCCCC"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 1" uuid="7df644e4-f93d-4fde-a817-78d3722c30aa">
+						<datasetParameter name="from_date_d">
+							<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="to_date_d">
+							<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="504d5017-a690-4392-896b-113e73014d80">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<staticText>
+								<reportElement uuid="21466b51-da9f-4935-8e9b-ded490474263" mode="Opaque" x="0" y="0" width="90" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[From]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+							</box>
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="7101d34b-c331-4c1d-a99e-776e7db6994b" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#000000" backcolor="#B30003"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format($P{from_date_d})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="42e4de62-c477-4d3b-a693-0d864e36d508">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<box>
+								<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+							</box>
+							<staticText>
+								<reportElement uuid="f0c2e2a9-9593-482e-a392-6deda1fd48e6" mode="Opaque" x="0" y="0" width="90" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[To]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<box>
+								<pen lineColor="#CCCCCC"/>
+								<topPen lineColor="#CCCCCC"/>
+								<leftPen lineColor="#CCCCCC"/>
+								<bottomPen lineColor="#CCCCCC"/>
+								<rightPen lineColor="#CCCCCC"/>
+							</box>
+							<textField>
+								<reportElement uuid="d7918608-47f8-482a-ae20-6bfed7d55c64" style="AltBck" x="0" y="0" width="90" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format($P{to_date_d})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="72" uuid="d8725af7-ff6e-4a35-b058-3fa95e18579e">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<box>
+								<pen lineColor="#CCCCCC"/>
+								<topPen lineColor="#CCCCCC"/>
+								<leftPen lineColor="#CCCCCC"/>
+								<bottomPen lineColor="#CCCCCC"/>
+								<rightPen lineColor="#CCCCCC"/>
+							</box>
+							<staticText>
+								<reportElement uuid="95b7be21-54b5-4f07-95eb-a89e07f724d9" mode="Opaque" x="0" y="0" width="72" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Organization]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<box>
+								<pen lineColor="#CCCCCC"/>
+								<topPen lineColor="#CCCCCC"/>
+								<leftPen lineColor="#CCCCCC"/>
+								<bottomPen lineColor="#CCCCCC"/>
+								<rightPen lineColor="#CCCCCC"/>
+							</box>
+							<textField>
+								<reportElement uuid="d756b740-d695-4e9c-a0c5-b538ea4d2889" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{typ}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="73" uuid="fadeaed0-73d7-4716-83a6-70492bf061c5">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<box>
+								<pen lineColor="#CCCCCC"/>
+								<topPen lineColor="#CCCCCC"/>
+								<leftPen lineColor="#CCCCCC"/>
+								<bottomPen lineColor="#CCCCCC"/>
+								<rightPen lineColor="#CCCCCC"/>
+							</box>
+							<staticText>
+								<reportElement uuid="0e371e2f-0998-4d65-b298-05ab6ab0f4ee" mode="Opaque" x="0" y="0" width="73" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="053f1f9c-3186-4a99-b715-3fd7233be04e" style="AltBck" x="0" y="0" width="73" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SUM_}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="72" uuid="c28a31c4-854a-43df-82d6-89e788f749b7">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<box>
+								<pen lineColor="#CCCCCC"/>
+								<topPen lineColor="#CCCCCC"/>
+								<leftPen lineColor="#CCCCCC"/>
+								<bottomPen lineColor="#CCCCCC"/>
+								<rightPen lineColor="#CCCCCC"/>
+							</box>
+							<staticText>
+								<reportElement uuid="dea930cb-34f2-43b8-8c2b-a914fd167103" mode="Opaque" x="0" y="0" width="72" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Avg]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<textField pattern="###0.00">
+								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{AVG_}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="73" uuid="a7e2ab0e-4421-4510-8562-4e565c7b6817">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6630bb8f-1441-40de-a4d9-46abecebc52c" mode="Opaque" x="0" y="0" width="73" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Max]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="5495827e-5935-4e85-8b18-63c0b9941461" style="AltBck" x="0" y="0" width="73" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{MAX_}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="72" uuid="523cfc62-2e4b-4ce0-8651-cbd725aa099a">
+						<jr:columnHeader style="table 11_CH" height="14" rowSpan="1">
+							<staticText>
+								<reportElement uuid="97b66d01-b08a-4fde-9a3e-34aedf1c8002" mode="Opaque" x="0" y="0" width="72" height="14" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Min]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
+							<textField>
+								<reportElement uuid="986f70d6-7861-44d9-83ae-f1d294e07cfc" style="AltBck" x="0" y="0" width="72" height="14"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{MIN_}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
