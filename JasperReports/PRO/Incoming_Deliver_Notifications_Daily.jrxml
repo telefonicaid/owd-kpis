@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
-	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
-	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
+	<property name="ireport.y" value="240"/>
+	<property name="ireport.jasperserver.reportUnit" value="/OWD/Incoming_Deliver_Reports/Incoming_Delivered_Notifications_D"/>
+	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -276,23 +276,23 @@
 	</style>
 	<subDataset name="New Dataset 1" uuid="eda2c39d-4358-4979-9d9f-f3387f27db91">
 		<parameter name="from_date_d" class="java.util.Date" isForPrompting="false">
-			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date" isForPrompting="false">
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT typ, SUM(Totales) AS SUM_, MAX(Totales) AS MAX_, ROUND(AVG(Totales),2) AS AVG_,
+			<![CDATA[SELECT typ, SUM(Totales) AS SUM_, MAX(Totales) AS MAX_, ROUND(AVG(Totales),0) AS AVG_,
 MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+   WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+    WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
     GROUP BY DATE(fecha))
 ) as t1
 GROUP BY typ
@@ -309,48 +309,31 @@ ORDER BY typ DESC]]>
 		</variable>
 	</subDataset>
 	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("WEEK-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
-	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY").toDateRange()]]></defaultValueExpression>
+	<parameter name="from_date_d" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getStart().getTime())]]></defaultValueExpression>
 	</parameter>
-	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
+	<parameter name="to_date_d" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getEnd().getTime())]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT *
+		<![CDATA[SELECT t1.Dt AS Dt, t1.Totales AS Totales, t1.typ AS typ
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+   WHERE fecha >= $P{from_date_d} AND fecha <= (DATE_ADD($P{to_date_d},INTERVAL 23 HOUR))
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+    WHERE fecha >= $P{from_date_d} AND fecha <= (DATE_ADD($P{to_date_d},INTERVAL 23 HOUR))
     GROUP BY DATE(fecha))
-) as t1
-GROUP BY Dt, typ
-ORDER BY Dt ASC, typ DESC]]>
+) as t1]]>
 	</queryString>
 	<field name="Dt" class="java.sql.Date"/>
 	<field name="Totales" class="java.math.BigDecimal"/>
 	<field name="typ" class="java.lang.String"/>
-	<variable name="overall" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
-	</variable>
-	<variable name="avg" class="java.lang.Float" calculation="Average">
-		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
-	</variable>
-	<variable name="min" class="java.lang.Integer" calculation="Lowest">
-		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
-	</variable>
-	<variable name="max" class="java.lang.Integer" calculation="Highest">
-		<variableExpression><![CDATA[$F{Totales}]]></variableExpression>
-	</variable>
 	<background>
 		<band height="443" splitType="Stretch">
 			<staticText>
@@ -413,8 +396,8 @@ ORDER BY Dt ASC, typ DESC]]>
 				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<timeSeriesChart>
-				<chart>
-					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="117" y="25" width="540" height="275" isRemoveLineWhenBlank="true">
+				<chart isShowLegend="true">
+					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="117" y="25" width="540" height="275" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
 						<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 					</reportElement>
 					<chartTitle/>
@@ -428,13 +411,13 @@ ORDER BY Dt ASC, typ DESC]]>
 						<valueExpression><![CDATA[$F{Totales}]]></valueExpression>
 					</timeSeries>
 				</timeSeriesDataset>
-				<timeSeriesPlot>
-					<plot>
+				<timeSeriesPlot isShowLines="true" isShowShapes="true">
+					<plot orientation="Horizontal">
 						<seriesColor seriesOrder="0" color="#B30003"/>
 						<seriesColor seriesOrder="1" color="#E85A06"/>
 					</plot>
 					<timeAxisFormat>
-						<axisFormat>
+						<axisFormat verticalTickLabels="false">
 							<labelFont>
 								<font size="8"/>
 							</labelFont>
@@ -444,7 +427,7 @@ ORDER BY Dt ASC, typ DESC]]>
 						</axisFormat>
 					</timeAxisFormat>
 					<valueAxisFormat>
-						<axisFormat/>
+						<axisFormat verticalTickLabels="false"/>
 					</valueAxisFormat>
 				</timeSeriesPlot>
 			</timeSeriesChart>
@@ -577,7 +560,7 @@ ORDER BY Dt ASC, typ DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
-							<textField pattern="###0.00">
+							<textField pattern="###0">
 								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
