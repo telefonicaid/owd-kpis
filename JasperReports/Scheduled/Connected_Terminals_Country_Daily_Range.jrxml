@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="255"/>
-	<property name="ireport.y" value="531"/>
+	<property name="ireport.x" value="107"/>
+	<property name="ireport.y" value="432"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/Scheduled_reports/Connected_Terminlas_D_Country_R"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
 	<style name="table">
@@ -703,7 +703,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day bt mobile networks]]></text>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day  - excluding Wifi]]></text>
 				</staticText>
 			</band>
 		</groupHeader>

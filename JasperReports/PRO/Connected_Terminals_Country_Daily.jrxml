@@ -703,7 +703,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day bt mobile networks]]></text>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day  - excluding Wifi]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
