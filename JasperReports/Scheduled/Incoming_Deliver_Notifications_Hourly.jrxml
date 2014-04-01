@@ -282,7 +282,7 @@
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT typ, SUM(Totales) AS total, ROUND(AVG(Totales),2) AS AVG_, MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
+			<![CDATA[SELECT typ, SUM(Totales) AS total, ROUND(AVG(Totales),0) AS AVG_, MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
 FROM(
 	(SELECT fecha, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
@@ -315,19 +315,35 @@ ORDER BY typ DESC]]>
 	<queryString>
 		<![CDATA[SELECT *
 FROM (
-   (SELECT fecha AS Dt, total AS Totales, "Delivered" AS typ
+   (SELECT cal.calendar_datetime AS Dt, COALESCE(del.Totales,0,del.Totales) AS Totales, COALESCE(del.typ,"Delivered","Delivered") AS typ
+FROM (
+SELECT fecha AS Dt, total AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
+   WHERE fecha >= $P{From_date} AND fecha <= $P{To_date}
    GROUP BY Dt
+    ) AS del
+RIGHT JOIN (
+	SELECT * FROM kpis_db.calendar
+	WHERE  (calendar_datetime >= $P{From_date} AND calendar_datetime <= $P{To_date})
+	) AS cal
+	ON (del.Dt = cal.calendar_datetime)
    )
   UNION
-   (SELECT fecha AS Dt, SUM(total) AS Totales, "Incoming" AS typ
+   (SELECT cal.calendar_datetime, COALESCE(inc.Totales,0,inc.Totales) AS Totales, COALESCE(inc.typ,"Incoming","Incoming") AS typ
+FROM (
+SELECT fecha AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
+    WHERE fecha >= $P{From_date} AND fecha <= $P{To_date}
     GROUP BY Dt
+    ) AS inc
+RIGHT JOIN (
+	SELECT * FROM kpis_db.calendar
+	WHERE  (calendar_datetime >= $P{From_date} AND calendar_datetime <= $P{To_date})
+	) AS cal
+	ON (inc.Dt = cal.calendar_datetime)
     )
 ) as t1
-ORDER BY typ DESC]]>
+ORDER BY Dt ASC]]>
 	</queryString>
 	<field name="Dt" class="java.sql.Timestamp"/>
 	<field name="Totales" class="java.math.BigDecimal"/>
@@ -570,7 +586,7 @@ ORDER BY typ DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
-							<textField pattern="###0.00">
+							<textField pattern="###0">
 								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>

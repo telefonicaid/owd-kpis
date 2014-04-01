@@ -286,7 +286,7 @@ ON T5.ip = ne.ip
 WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}
 GROUP BY _ip, fecha) AS agr
 GROUP BY ip
-ORDER BY _id, ip]]>
+ORDER BY _id, total_all DESC]]>
 		</queryString>
 		<field name="ip" class="java.lang.String">
 			<fieldDescription><![CDATA[]]></fieldDescription>
@@ -322,7 +322,7 @@ ORDER BY _id, ip]]>
 		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{range}.getEnd().getTime())]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT *, IF (tbl._ip = 'Others',1,0) AS _id
+		<![CDATA[SELECT cal.calendar_datetime AS fecha, COALESCE(total,0,tbl.total) AS total, COALESCE(tbl._ip,'Others',tbl._ip) AS _ip, IF (tbl._ip = 'Others',1,0) AS _id
 FROM(
 SELECT ne.fecha,
    	SUM(ne.total) as total,
@@ -336,7 +336,7 @@ LEFT JOIN
 (
 	SELECT SUM(total) AS Total, ip
 	FROM kpis_db.notificaciones_entrantes_agr
-	WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
+	 WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
 	GROUP BY ip
 	ORDER BY Total DESC
 	LIMIT 5 /*cambiar en PRO a 5*/
@@ -345,16 +345,20 @@ ON T5.ip = ne.ip
 WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}
 GROUP BY _ip, fecha
 ORDER BY _ip DESC) AS tbl
-ORDER BY fecha, _id DESC]]>
+RIGHT JOIN (
+	SELECT *
+	FROM kpis_db.calendar
+	WHERE  (calendar_datetime >= $P{From_date} AND calendar_datetime <= $P{To_date})
+	) AS cal
+ON (tbl.fecha = cal.calendar_datetime)
+ORDER BY fecha, _id ASC, total DESC]]>
 	</queryString>
-	<field name="fecha" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[viene de notificaciones_entrantes]]></fieldDescription>
-	</field>
+	<field name="fecha" class="java.sql.Timestamp"/>
 	<field name="total" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="_ip" class="java.lang.String"/>
-	<field name="_id" class="java.lang.Long"/>
+	<field name="_id" class="java.lang.Integer"/>
 	<variable name="num_intervals" class="java.lang.Integer">
 		<variableExpression><![CDATA[(($P{To_date}.getTime() - $P{From_date}.getTime())/(1000 * 60 * 60 ))]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -432,12 +436,12 @@ ORDER BY fecha, _id DESC]]>
 				</categoryDataset>
 				<barPlot isShowLabels="false" isShowTickLabels="true" isShowTickMarks="false">
 					<plot labelRotation="0.0">
-						<seriesColor seriesOrder="0" color="#999999"/>
-						<seriesColor seriesOrder="1" color="#B30003"/>
-						<seriesColor seriesOrder="2" color="#CD4909"/>
-						<seriesColor seriesOrder="3" color="#E85A06"/>
-						<seriesColor seriesOrder="4" color="#F49B19"/>
-						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+						<seriesColor seriesOrder="0" color="#B30003"/>
+						<seriesColor seriesOrder="1" color="#CD4909"/>
+						<seriesColor seriesOrder="2" color="#E85A06"/>
+						<seriesColor seriesOrder="3" color="#F49B19"/>
+						<seriesColor seriesOrder="4" color="#FFFF5D"/>
+						<seriesColor seriesOrder="5" color="#999999"/>
 					</plot>
 					<itemLabel/>
 					<categoryAxisFormat labelRotation="0.0">
@@ -462,24 +466,34 @@ ORDER BY fecha, _id DESC]]>
 				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="606" y="79" width="192" height="158" forecolor="#000000" backcolor="#FFFFFF"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="606" y="75" width="192" height="229" forecolor="#000000" backcolor="#FFFFFF"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<pieDataset>
-					<keyExpression><![CDATA[$F{_ip}]]></keyExpression>
-					<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					<dataset>
+						<datasetRun subDataset="New Dataset 2" uuid="d0e84f92-bd6c-4259-b824-0fdab664f763">
+							<datasetParameter name="From_date">
+								<datasetParameterExpression><![CDATA[$P{From_date}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="To_date">
+								<datasetParameterExpression><![CDATA[$P{To_date}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{ip}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total_all}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" labelFormat="{2}">
 					<plot>
-						<seriesColor seriesOrder="0" color="#999999"/>
-						<seriesColor seriesOrder="1" color="#B30003"/>
-						<seriesColor seriesOrder="2" color="#CD4909"/>
-						<seriesColor seriesOrder="3" color="#E85A06"/>
-						<seriesColor seriesOrder="4" color="#F49B19"/>
-						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+						<seriesColor seriesOrder="0" color="#B30003"/>
+						<seriesColor seriesOrder="1" color="#CD4909"/>
+						<seriesColor seriesOrder="2" color="#E85A06"/>
+						<seriesColor seriesOrder="3" color="#F49B19"/>
+						<seriesColor seriesOrder="4" color="#FFFF5D"/>
+						<seriesColor seriesOrder="5" color="#999999"/>
 					</plot>
 					<itemLabel/>
 				</piePlot>
@@ -515,7 +529,7 @@ ORDER BY fecha, _id DESC]]>
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<text><![CDATA[IP]]></text>
+								<text><![CDATA[Sources]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table 10_TD" height="16" rowSpan="1">

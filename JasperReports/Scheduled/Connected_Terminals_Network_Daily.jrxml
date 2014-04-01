@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
-	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="96"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -281,6 +281,10 @@
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
+		<parameter name="max" class="java.math.BigDecimal" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="min" class="java.math.BigDecimal" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total, IF (_all._alias = 'Others',1,0) AS _id
 FROM (
@@ -303,17 +307,17 @@ LEFT JOIN
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
 	LIMIT 9 /* Cambiar en 9 en PRO */
 ) AS T9
 	ON op.alias = T9.alias
-WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY _alias, _day
 ORDER BY _day, tcn.total DESC) _all
 GROUP BY _all._alias
-ORDER BY _id ASC]]>
+ORDER BY _id ASC, total DESC]]>
 		</queryString>
 		<field name="_alias" class="java.lang.String"/>
 		<field name="_MAX" class="java.math.BigDecimal"/>
@@ -324,10 +328,10 @@ ORDER BY _id ASC]]>
 		</field>
 		<field name="_id" class="java.lang.Integer"/>
 		<variable name="max_dmax" class="java.lang.Integer" calculation="Highest">
-			<variableExpression><![CDATA[$F{_MAX}]]></variableExpression>
+			<variableExpression><![CDATA[$F{total}]]></variableExpression>
 		</variable>
 		<variable name="min_dmin" class="java.lang.Integer" calculation="Lowest">
-			<variableExpression><![CDATA[$F{_MIN}]]></variableExpression>
+			<variableExpression><![CDATA[$F{total}]]></variableExpression>
 		</variable>
 		<variable name="sum_avg" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{_AVG}]]></variableExpression>
@@ -339,20 +343,17 @@ ORDER BY _id ASC]]>
 			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-30").toDateRange()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
-	</parameter>
-	<queryString>
-		<![CDATA[SELECT DATE(tcn.fecha) AS _day,
+	<subDataset name="only_ncc_all" uuid="d5961d4e-5c00-4f2d-9b7b-2506ab7fade9">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),0) AS _AVG, SUM(_all.total) AS total, IF (_all._alias = 'Others',1,0) AS _id
+FROM (
+SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.alias IS NOT NULL
 	THEN T9.alias
 	ELSE 'Others'
@@ -371,21 +372,490 @@ LEFT JOIN
 		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
 	INNER JOIN operator AS op
 		ON ncc.alias = op.idoperator
-	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
+	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
 	LIMIT 9 /* Cambiar en 9 en PRO */
 ) AS T9
 	ON op.alias = T9.alias
-WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
+WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+GROUP BY _alias, _day
+ORDER BY _day, tcn.total DESC) _all
+WHERE _alias <> 'Wi-Fi'
+GROUP BY _all._alias
+ORDER BY _id ASC, total DESC]]>
+		</queryString>
+		<field name="_alias" class="java.lang.String"/>
+		<field name="_MAX" class="java.math.BigDecimal"/>
+		<field name="_MIN" class="java.math.BigDecimal"/>
+		<field name="_AVG" class="java.math.BigDecimal"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="_id" class="java.lang.Integer"/>
+	</subDataset>
+	<subDataset name="all_grph" uuid="a8d31ed8-8e56-4fa2-803d-4f929148c8e7">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
+	THEN T9.alias
+	ELSE 'Others'
+	END AS _alias,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 9 /* Cambiar en 9 en PRO */
+) AS T9
+	ON op.alias = T9.alias
+WHERE (tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d})
 GROUP BY _alias, _day
 ORDER BY _day ASC, tcn.total DESC]]>
+		</queryString>
+		<field name="_day" class="java.sql.Date"/>
+		<field name="_alias" class="java.lang.String"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="only_ncc" uuid="e9677157-3b29-4406-b2f5-db3cf5f1420e">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.alias IS NOT NULL
+	THEN T9.alias
+	ELSE 'Others'
+	END AS _alias,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 9 /* Cambiar en 9 en PRO */
+) AS T9
+	ON op.alias = T9.alias
+WHERE (tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}) AND (tcn.mcc <> 0 AND tcn.mnc <> 0)
+GROUP BY _alias, _day
+ORDER BY _day ASC, tcn.total DESC]]>
+		</queryString>
+		<field name="_day" class="java.sql.Date"/>
+		<field name="_alias" class="java.lang.String"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-30").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT MAX(tbl.total) AS MAX_period, MIN(tbl.total) AS MIN_period
+FROM(
+SELECT DATE(tcn.fecha) AS _day,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+WHERE (fecha >= $P{from_date_d} AND fecha <= $P{to_date_d} )
+GROUP BY _day
+ORDER BY _day, tcn.total DESC) AS tbl]]>
 	</queryString>
-	<field name="_day" class="java.sql.Date"/>
-	<field name="_alias" class="java.lang.String"/>
-	<field name="total" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="MAX_period" class="java.math.BigDecimal"/>
+	<field name="MIN_period" class="java.math.BigDecimal"/>
+	<group name="summary">
+		<groupHeader>
+			<band height="443">
+				<componentElement>
+					<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="208" y="53" width="429" height="107"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="all_data" uuid="ec1cc80e-c5ae-4fed-af53-4de5aa42bbf0">
+							<datasetParameter name="from_date_d">
+								<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="to_date_d">
+								<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="max">
+								<datasetParameterExpression><![CDATA[$F{MAX_period}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="min">
+								<datasetParameterExpression><![CDATA[$F{MIN_period}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="150" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
+							<jr:columnHeader height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0" mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<text><![CDATA[Network]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<text><![CDATA[Total    ]]></text>
+								</staticText>
+							</jr:columnFooter>
+							<jr:detailCell height="14" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{_alias}+"    "]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="fa6318cd-1c29-484c-a7fd-8a25983568ff">
+							<jr:columnHeader height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="5bb43c38-cfac-4594-bf06-43ab69d7e481" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<text><![CDATA[Daily Max]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="15" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{max}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:detailCell height="14" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement uuid="e8414f17-4219-4720-b8ad-2babd37c92b2" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{_MAX}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="8a400733-1e85-4171-b5cd-06e027b31dae">
+							<jr:columnHeader height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="e5a9e842-0256-4468-8bc5-2505a5560072" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<text><![CDATA[Daily Min]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="15" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$P{min}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:detailCell height="14" rowSpan="1">
+								<textField pattern="" isBlankWhenNull="false">
+									<reportElement uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{_MIN}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="7de2ea11-6a45-46d1-b544-a91b354400d7">
+							<jr:columnHeader height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="fde735fd-ebdc-449f-87cd-69030fb803dd" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<text><![CDATA[Daily Avg]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter height="15" rowSpan="1">
+								<textField pattern="###0" isBlankWhenNull="false">
+									<reportElement uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$V{avg}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:detailCell height="14" rowSpan="1">
+								<textField pattern="###0" isBlankWhenNull="false">
+									<reportElement uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+									<box>
+										<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+										<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+										<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+										<paragraph lineSpacing="Single"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{_AVG}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<staticText>
+					<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="34" y="18" width="126" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[Summary]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="graph_all" isStartNewPage="true">
+		<groupHeader>
+			<band height="443">
+				<pieChart>
+					<chart isShowLegend="true">
+						<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="558" y="74" width="231" height="257"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</chart>
+					<pieDataset>
+						<dataset>
+							<datasetRun subDataset="all_data" uuid="02b3c6c7-b284-4071-829d-117cc079fd4c">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
+						<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					</pieDataset>
+					<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
+						<plot>
+							<seriesColor seriesOrder="0" color="#19FFFF"/>
+							<seriesColor seriesOrder="1" color="#19BDC1"/>
+							<seriesColor seriesOrder="2" color="#3366FF"/>
+							<seriesColor seriesOrder="3" color="#054266"/>
+							<seriesColor seriesOrder="4" color="#B30003"/>
+							<seriesColor seriesOrder="5" color="#D11417"/>
+							<seriesColor seriesOrder="6" color="#E85A06"/>
+							<seriesColor seriesOrder="7" color="#F49B19"/>
+							<seriesColor seriesOrder="8" color="#FFFF5D"/>
+							<seriesColor seriesOrder="9" color="#999999"/>
+						</plot>
+						<itemLabel/>
+					</piePlot>
+				</pieChart>
+				<image>
+					<reportElement uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4" x="697" y="386" width="105" height="57"/>
+					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="493" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
+				</staticText>
+				<timeSeriesChart>
+					<chart>
+						<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" isPrintRepeatedValues="false" x="34" y="56" width="511" height="275">
+							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
+						</reportElement>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend position="Bottom"/>
+					</chart>
+					<timeSeriesDataset>
+						<dataset>
+							<datasetRun subDataset="all_grph" uuid="d422c5bd-e465-4b3f-b32a-64d974a3c42f">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<timeSeries>
+							<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{total}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot isShowLines="true" isShowShapes="true">
+						<plot>
+							<seriesColor seriesOrder="0" color="#19FFFF"/>
+							<seriesColor seriesOrder="1" color="#19BDC1"/>
+							<seriesColor seriesOrder="2" color="#3366FF"/>
+							<seriesColor seriesOrder="3" color="#054266"/>
+							<seriesColor seriesOrder="4" color="#B30003"/>
+							<seriesColor seriesOrder="5" color="#D11417"/>
+							<seriesColor seriesOrder="6" color="#E85A06"/>
+							<seriesColor seriesOrder="7" color="#F49B19"/>
+							<seriesColor seriesOrder="8" color="#FFFF5D"/>
+							<seriesColor seriesOrder="9" color="#999999"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat verticalTickLabels="false">
+								<labelFont>
+									<font size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisFormat>
+							<axisFormat verticalTickLabels="false"/>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band height="443" splitType="Stretch">
 			<staticText>
@@ -410,10 +880,6 @@ ORDER BY _day ASC, tcn.total DESC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4" x="697" y="386" width="105" height="57"/>
-				<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
-			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
 				<reportElement uuid="2cd30490-5008-4754-b75e-a17fc8c60fc0" mode="Transparent" x="108" y="-73" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
@@ -442,14 +908,9 @@ ORDER BY _day ASC, tcn.total DESC]]>
 	</background>
 	<summary>
 		<band height="443">
-			<staticText>
-				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="46" y="329" width="126" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Summary]]></text>
-			</staticText>
 			<timeSeriesChart>
 				<chart>
-					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" isPrintRepeatedValues="false" x="26" y="43" width="511" height="275">
+					<reportElement uuid="881b5915-641b-444e-b8e0-db2d4348d4f1" isPrintRepeatedValues="false" x="36" y="53" width="511" height="275">
 						<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 					</reportElement>
 					<chartTitle/>
@@ -457,6 +918,16 @@ ORDER BY _day ASC, tcn.total DESC]]>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<timeSeriesDataset>
+					<dataset>
+						<datasetRun subDataset="only_ncc" uuid="f45dd4fc-faf5-4cd5-aebd-561be9d69cb0">
+							<datasetParameter name="from_date_d">
+								<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="to_date_d">
+								<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
 					<timeSeries>
 						<seriesExpression><![CDATA[$F{_alias}]]></seriesExpression>
 						<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
@@ -465,16 +936,15 @@ ORDER BY _day ASC, tcn.total DESC]]>
 				</timeSeriesDataset>
 				<timeSeriesPlot isShowLines="true" isShowShapes="true">
 					<plot>
-						<seriesColor seriesOrder="0" color="#19FFFF"/>
-						<seriesColor seriesOrder="1" color="#19BDC1"/>
-						<seriesColor seriesOrder="2" color="#3366FF"/>
-						<seriesColor seriesOrder="3" color="#054266"/>
-						<seriesColor seriesOrder="4" color="#B30003"/>
-						<seriesColor seriesOrder="5" color="#D11417"/>
-						<seriesColor seriesOrder="6" color="#E85A06"/>
-						<seriesColor seriesOrder="7" color="#F49B19"/>
-						<seriesColor seriesOrder="8" color="#FFFF5D"/>
-						<seriesColor seriesOrder="9" color="#999999"/>
+						<seriesColor seriesOrder="0" color="#19BDC1"/>
+						<seriesColor seriesOrder="1" color="#3366FF"/>
+						<seriesColor seriesOrder="2" color="#054266"/>
+						<seriesColor seriesOrder="3" color="#B30003"/>
+						<seriesColor seriesOrder="4" color="#D11417"/>
+						<seriesColor seriesOrder="5" color="#E85A06"/>
+						<seriesColor seriesOrder="6" color="#F49B19"/>
+						<seriesColor seriesOrder="7" color="#FFFF5D"/>
+						<seriesColor seriesOrder="8" color="#999999"/>
 					</plot>
 					<timeAxisFormat>
 						<axisFormat verticalTickLabels="false">
@@ -492,265 +962,45 @@ ORDER BY _day ASC, tcn.total DESC]]>
 				</timeSeriesPlot>
 			</timeSeriesChart>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="550" y="73" width="224" height="168"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="fb8a7a17-d9e6-4da6-8388-2fb5fbc427df" mode="Transparent" x="558" y="84" width="231" height="244" forecolor="#000000" backcolor="#FFFFFF"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="only_ncc_all" uuid="bea84443-3b23-474e-ae1a-12db92d3c397"/>
+					</dataset>
 					<keyExpression><![CDATA[$F{_alias}]]></keyExpression>
 					<valueExpression><![CDATA[$F{total}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
 					<plot>
-						<seriesColor seriesOrder="0" color="#19FFFF"/>
-						<seriesColor seriesOrder="1" color="#19BDC1"/>
-						<seriesColor seriesOrder="2" color="#3366FF"/>
-						<seriesColor seriesOrder="3" color="#054266"/>
-						<seriesColor seriesOrder="4" color="#B30003"/>
-						<seriesColor seriesOrder="5" color="#D11417"/>
-						<seriesColor seriesOrder="6" color="#E85A06"/>
-						<seriesColor seriesOrder="7" color="#F49B19"/>
-						<seriesColor seriesOrder="8" color="#FFFF5D"/>
-						<seriesColor seriesOrder="9" color="#999999"/>
+						<seriesColor seriesOrder="0" color="#19BDC1"/>
+						<seriesColor seriesOrder="1" color="#3366FF"/>
+						<seriesColor seriesOrder="2" color="#054266"/>
+						<seriesColor seriesOrder="3" color="#B30003"/>
+						<seriesColor seriesOrder="4" color="#D11417"/>
+						<seriesColor seriesOrder="5" color="#E85A06"/>
+						<seriesColor seriesOrder="6" color="#F49B19"/>
+						<seriesColor seriesOrder="7" color="#FFFF5D"/>
+						<seriesColor seriesOrder="8" color="#999999"/>
 					</plot>
 					<itemLabel/>
 				</piePlot>
 			</pieChart>
-			<componentElement>
-				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="135" y="356" width="360" height="50"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="all_data" uuid="13457d0b-224e-46bd-ba65-7dfc589364e1">
-						<datasetParameter name="from_date_d">
-							<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
-						</datasetParameter>
-						<datasetParameter name="to_date_d">
-							<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
-						</datasetParameter>
-						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					</datasetRun>
-					<jr:column width="150" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
-						<jr:columnHeader height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0" mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Network]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Total    ]]></text>
-							</staticText>
-						</jr:columnFooter>
-						<jr:detailCell height="14" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{_alias}+"    "]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="fa6318cd-1c29-484c-a7fd-8a25983568ff">
-						<jr:columnHeader height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="5bb43c38-cfac-4594-bf06-43ab69d7e481" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Daily Max]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{max_dmax}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell height="14" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="e8414f17-4219-4720-b8ad-2babd37c92b2" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{_MAX}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="8a400733-1e85-4171-b5cd-06e027b31dae">
-						<jr:columnHeader height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="e5a9e842-0256-4468-8bc5-2505a5560072" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Daily Min]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{min_dmin}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell height="14" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{_MIN}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="90" uuid="7de2ea11-6a45-46d1-b544-a91b354400d7">
-						<jr:columnHeader height="15" rowSpan="1">
-							<staticText>
-								<reportElement uuid="fde735fd-ebdc-449f-87cd-69030fb803dd" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Daily Avg]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{avg}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell height="14" rowSpan="1">
-							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{_AVG}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
+			<image>
+				<reportElement uuid="a4c385db-5e20-47ad-b69c-8bf3f53dac60" x="697" y="386" width="105" height="57"/>
+				<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="493" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement uuid="48a86d0b-04b5-4d40-8e1d-08b83f0ea6d6" mode="Transparent" x="44" y="24" width="567" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
+				<text><![CDATA[Number of terminals which connected to the push server at least once on the given day by mobile networks]]></text>
 			</staticText>
 		</band>
 	</summary>

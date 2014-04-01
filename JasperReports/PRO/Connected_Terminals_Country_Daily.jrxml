@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -423,11 +423,11 @@ ORDER BY _id, total DESC]]>
 			</staticText>
 			<image>
 				<reportElement uuid="974f7017-654e-4a20-9fcb-14c7547b210d" x="611" y="-104" width="145" height="71"/>
-				<imageExpression><![CDATA["repo:/components/tid_ffos.gif"]]></imageExpression>
+				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement uuid="76888379-2a95-40da-a50b-5c96e18c9d4d" x="658" y="334" width="95" height="95"/>
-				<imageExpression><![CDATA["repo:/components/foxsit.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["repo:/OWD/components/foxsit.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -483,8 +483,8 @@ ORDER BY _id, total DESC]]>
 				</timeSeriesPlot>
 			</timeSeriesChart>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="168"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="245"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -743,16 +743,6 @@ ORDER BY _id, total DESC]]>
 				</textElement>
 				<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
 			</staticText>
-			<textField>
-				<reportElement uuid="9b5e913d-48b4-4af3-98b8-c751f86b2ffd" x="630" y="303" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[""+$P{range}.getStart()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="9e2bbc26-a00e-4e17-8fea-d7ea4bc0514b" x="630" y="336" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[""+$P{range}.getEnd()]]></textFieldExpression>
-			</textField>
 		</band>
 	</summary>
 </jasperReport>

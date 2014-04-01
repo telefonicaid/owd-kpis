@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
-	<property name="ireport.zoom" value="0.5"/>
+	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="101"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -349,16 +349,16 @@ LEFT JOIN
 (
 	SELECT SUM(total) AS Total, ip
 	FROM kpis_db.notificaciones_entrantes_agr
-	WHERE fecha >= '2014-03-17 00:00:00' AND fecha <= '2014-03-23 23:59:59'
+	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 	GROUP BY ip
 	ORDER BY Total DESC
 	LIMIT 5 /*cambiar en PRO a 5*/
 ) AS T5
 ON T5.ip = ne.ip
-WHERE ne.fecha >= '2014-03-17 00:00:00' AND ne.fecha <= '2014-03-23 23:59:59'
+WHERE ne.fecha >= $P{from_date_d} AND ne.fecha <= $P{to_date_d}
 GROUP BY _ip, DATE(fecha)
 ORDER BY _ip DESC) AS tbl
-ORDER BY fecha, _id DESC]]>
+ORDER BY fecha, _id ASC]]>
 	</queryString>
 	<field name="fecha" class="java.sql.Date">
 		<fieldDescription><![CDATA[viene de notificaciones_entrantes]]></fieldDescription>
@@ -448,12 +448,12 @@ ORDER BY fecha, _id DESC]]>
 				</categoryDataset>
 				<barPlot isShowLabels="false" isShowTickLabels="true" isShowTickMarks="false">
 					<plot labelRotation="-30.0">
-						<seriesColor seriesOrder="0" color="#999999"/>
-						<seriesColor seriesOrder="1" color="#B30003"/>
-						<seriesColor seriesOrder="2" color="#CD4909"/>
-						<seriesColor seriesOrder="3" color="#E85A06"/>
-						<seriesColor seriesOrder="4" color="#F49B19"/>
-						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+						<seriesColor seriesOrder="0" color="#B30003"/>
+						<seriesColor seriesOrder="1" color="#CD4909"/>
+						<seriesColor seriesOrder="2" color="#E85A06"/>
+						<seriesColor seriesOrder="3" color="#F49B19"/>
+						<seriesColor seriesOrder="4" color="#FFFF5D"/>
+						<seriesColor seriesOrder="5" color="#999999"/>
 					</plot>
 					<itemLabel/>
 					<categoryAxisFormat labelRotation="-30.0">
@@ -478,24 +478,34 @@ ORDER BY fecha, _id DESC]]>
 				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="605" y="75" width="192" height="158" forecolor="#000000" backcolor="#FFFFFF"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="605" y="75" width="192" height="231" forecolor="#000000" backcolor="#FFFFFF"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend position="Bottom"/>
 				</chart>
 				<pieDataset>
-					<keyExpression><![CDATA[$F{_ip}]]></keyExpression>
-					<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					<dataset>
+						<datasetRun subDataset="New Dataset 2" uuid="e3470dfd-91d3-4305-900a-7f241f7d9d88">
+							<datasetParameter name="from_date_d">
+								<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="to_date_d">
+								<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{_Alias}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total_all}]]></valueExpression>
 				</pieDataset>
 				<piePlot isShowLabels="true" labelFormat="{2}">
 					<plot orientation="Horizontal">
-						<seriesColor seriesOrder="0" color="#999999"/>
-						<seriesColor seriesOrder="1" color="#B30003"/>
-						<seriesColor seriesOrder="2" color="#CD4909"/>
-						<seriesColor seriesOrder="3" color="#E85A06"/>
-						<seriesColor seriesOrder="4" color="#F49B19"/>
-						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+						<seriesColor seriesOrder="0" color="#B30003"/>
+						<seriesColor seriesOrder="1" color="#CD4909"/>
+						<seriesColor seriesOrder="2" color="#E85A06"/>
+						<seriesColor seriesOrder="3" color="#F49B19"/>
+						<seriesColor seriesOrder="4" color="#FFFF5D"/>
+						<seriesColor seriesOrder="5" color="#999999"/>
 					</plot>
 					<itemLabel/>
 				</piePlot>
@@ -616,7 +626,7 @@ ORDER BY fecha, _id DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="###0.00" isBlankWhenNull="false">
+							<textField pattern="###0" isBlankWhenNull="false">
 								<reportElement uuid="50c96757-652f-4968-98f0-6042fd5e43d5" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -633,7 +643,7 @@ ORDER BY fecha, _id DESC]]>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
-							<textField pattern="###0.00" isBlankWhenNull="false">
+							<textField pattern="###0" isBlankWhenNull="false">
 								<reportElement uuid="95e091e9-f307-499b-9b1a-5b04d0b419bd" style="AltBck" x="0" y="0" width="70" height="15" forecolor="#666666"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

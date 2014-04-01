@@ -485,8 +485,8 @@ ORDER BY _id, total DESC]]>
 				</timeSeriesPlot>
 			</timeSeriesChart>
 			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="168"/>
+				<chart isShowLegend="true">
+					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="245"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
