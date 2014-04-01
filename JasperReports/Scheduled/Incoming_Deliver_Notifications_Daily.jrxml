@@ -276,23 +276,23 @@
 	</style>
 	<subDataset name="New Dataset 1" uuid="eda2c39d-4358-4979-9d9f-f3387f27db91">
 		<parameter name="from_date_d" class="java.util.Date" isForPrompting="false">
-			<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date" isForPrompting="false">
 			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 		</parameter>
 		<queryString>
-			<![CDATA[SELECT typ, SUM(Totales) AS SUM_, MAX(Totales) AS MAX_, ROUND(AVG(Totales),2) AS AVG_,
+			<![CDATA[SELECT typ, SUM(Totales) AS SUM_, MAX(Totales) AS MAX_, ROUND(AVG(Totales),0) AS AVG_,
 MAX(Totales) AS MAX_, MIN(Totales) AS MIN_
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+   WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+    WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
     GROUP BY DATE(fecha))
 ) as t1
 GROUP BY typ
@@ -312,7 +312,7 @@ ORDER BY typ DESC]]>
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY").toDateRange()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="from_date_d" class="java.util.Date">
 		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
@@ -321,16 +321,16 @@ ORDER BY typ DESC]]>
 		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT *
+		<![CDATA[SELECT Dt, Totales, typ
 FROM (
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Delivered" AS typ
    FROM kpis_db.notificaciones_entregadas_agr AS ndel
-   WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+   WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
    GROUP BY DATE(fecha))
   UNION
    (SELECT DATE(fecha) AS Dt, SUM(total) AS Totales, "Incoming" AS typ
     FROM kpis_db.notificaciones_entrantes_agr AS ninc
-    WHERE fecha >= $P{from_date_d} AND fecha < $P{to_date_d}
+    WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
     GROUP BY DATE(fecha))
 ) as t1
 GROUP BY Dt, typ
@@ -577,7 +577,7 @@ ORDER BY Dt ASC, typ DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table 11_TD" height="14" rowSpan="1">
-							<textField pattern="###0.00">
+							<textField pattern="###0">
 								<reportElement uuid="bd35fe42-b6e6-4458-b231-4dd6dbf71014" style="AltBck" x="0" y="0" width="72" height="14" forecolor="#666666"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
