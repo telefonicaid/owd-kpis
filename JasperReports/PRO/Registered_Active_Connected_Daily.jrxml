@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="71"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.zoom" value="0.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
 	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
 	<style name="table">
@@ -323,17 +323,14 @@ ORDER BY fecha ASC
 		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT DATE(fecha) AS _Day, ROUND(AVG(registrados),0) AS registrados_agr, ROUND(AVG(conectados),0) AS conectados_agr,
- ROUND(AVG(activos),0) AS activos_agr
+		<![CDATA[SELECT DATE(fecha) AS _Day, MAX(registrados) AS registrados_agr
 FROM kpis_db.terminales_agr
 WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY DATE(fecha)
 ORDER BY fecha ASC]]>
 	</queryString>
 	<field name="_Day" class="java.sql.Date"/>
-	<field name="registrados_agr" class="java.math.BigDecimal"/>
-	<field name="conectados_agr" class="java.math.BigDecimal"/>
-	<field name="activos_agr" class="java.math.BigDecimal"/>
+	<field name="registrados_agr" class="java.lang.Integer"/>
 	<variable name="reg_total" class="java.lang.Long" calculation="Average">
 		<variableExpression><![CDATA[$F{registrados_agr}]]></variableExpression>
 	</variable>
@@ -441,7 +438,7 @@ Connected terminal
 			</staticText>
 			<timeSeriesChart>
 				<chart>
-					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="26" y="20" width="561" height="275" isRemoveLineWhenBlank="true">
+					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="30" y="20" width="561" height="275" isRemoveLineWhenBlank="true">
 						<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 					</reportElement>
 					<chartTitle/>
