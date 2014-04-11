@@ -37,6 +37,7 @@ if __name__ == '__main__':
     splunkList = service.saved_searches
     check_config(config,splunkList,args)
 
+
     # Get our Searchlist
     if args.hourly:
         searchlist=config.get('SEARCH','IDhourly').split(',')

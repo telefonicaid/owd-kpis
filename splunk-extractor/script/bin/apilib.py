@@ -15,7 +15,7 @@ import splunklib.results as results
 import argparse
 
 # Libs MySql
-from sqlalchemy import *
+#from sqlalchemy import *
 
 from datetime import date, timedelta
 import time
@@ -42,7 +42,7 @@ def check_config(config,searchList,frequency):
     else:
         logCreator('ERROR',"Frequency left")
         exit(1)
-        
+
     sections=config.sections()
 
     # Check if each search has his section defined or exist in Splunk server
@@ -153,12 +153,12 @@ def getMongo(config):
 
     return data
 
-def writeMysql(config,search,reader,entradas):
-    # Get Data
-    host = config.get('MYSQL','HOST')
-    db = config.get('MYSQL','DB')
-    user = config.get('MYSQL','USER')
-    pas = config.get('MYSQL', 'PASS')
+#def writeMysql(config,search,reader,entradas):
+#    # Get Data
+#    host = config.get('MYSQL','HOST')
+#    db = config.get('MYSQL','DB')
+#    user = config.get('MYSQL','USER')
+#    pas = config.get('MYSQL', 'PASS')
 
 def date_format(date):
     str = date
