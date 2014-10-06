@@ -188,7 +188,7 @@ def logInsert(config,search,reader,entradas):
            else:
                for item in reader:
                    for data in item:
-                       if (data != "_time") & (data != "_span"):
+                       if (data != "_time") & (data != "_span") & (data != "_spandays"):
                            next += "('"+date_format(item["_time"])+"',"+(item[data])+"), "
                 #next += "('"+date_format(item["_time"])+"',"+(item["1"])+"), "
 
@@ -259,7 +259,8 @@ def logInsert(config,search,reader,entradas):
                    for data in item:
                        if (data != "_time") & (data != "_span") & (data != "_spandays"):
                            # Active terminals: Which have received at least 1 notification in the last 24 hours
-                           next += "('" + date_format(item["_time"]) + "'," + str(registered) + "," +  str(connected) + "," + (item[data]) + "), "
+                           #next += "('" + date_format(item["_time"]) + "'," + str(registered) + "," +  str(connected) + "," + (item[data]) + "), "
+                           next += "('" + date_format(item["_time"]) + "'," + str(registered) + "," + (item[data]) + "," + str(connected) + "), "
     if type is "6":
            start="INSERT INTO "+ table +" VALUES "
            next=""
@@ -283,6 +284,21 @@ def logInsert(config,search,reader,entradas):
                        if (data != "_time") & (data != "_span"):
                            next += "('"+date_format(item["_time"])+"', '"+data+"',"+(item[data])+"), "
                 #next += "('"+date_format(item["_time"])+"',"+(item["1"])+"), "
+
+    if type is "8":
+           start="INSERT INTO "+ table +" VALUES "
+           next=""
+           yesterday = date.today() - timedelta(1)
+           today = yesterday.strftime("%Y-%m-%d 00:00:00")
+           if entradas == '0':
+               next += "('"+today+"',NULL"+"), "
+           else:
+               for item in reader:
+                   for data in item:
+                       if (data != "_time") & (data != "_span") & (data != "_spandays"):
+                           next += "('"+today+"',"+(item[data])+"), "
+                       else:
+                           timerecord = today
 
     #ans = start+next[:-2]+";"
     #logCreator('INFO',"INSERT table = %s search = %s" % table, search )

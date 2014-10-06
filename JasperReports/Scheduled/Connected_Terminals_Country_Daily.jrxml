@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
-	<property name="ireport.zoom" value="0.75"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<property name="ireport.jasperserver.reportUnit" value="/OWD/DeliveredNotifications"/>
-	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="107"/>
+	<property name="ireport.y" value="432"/>
+	<property name="ireport.jasperserver.reportUnit" value="/OWD/Scheduled_reports/Connected_Terminlas_D_Country_R"/>
+	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -281,6 +281,10 @@
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
+		<parameter name="max" class="java.math.BigDecimal" isForPrompting="false">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="min" class="java.math.BigDecimal" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT _all._country,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total, IF (_all._country = 'Oth',1,0) AS _id
 FROM (
@@ -334,20 +338,15 @@ ORDER BY _id ASC, total DESC]]>
 			<variableExpression><![CDATA[$V{sum_avg}/$V{num_elem}]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="from_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="to_date_d" class="java.util.Date">
-		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
-	</parameter>
-	<queryString>
-		<![CDATA[SELECT *, IF (tbl._country = 'Oth',1,0) AS _id
+	<subDataset name="all_graph" uuid="c35e7d0e-9dd8-4925-9baf-e8a5765708ab">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT *, IF (tbl._country = 'Oth',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
 	CASE WHEN T9.country IS NOT NULL
@@ -373,12 +372,342 @@ WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY _country, _day
 ORDER BY total DESC, _day DESC) AS tbl
 ORDER BY _id, total DESC]]>
+		</queryString>
+		<field name="_day" class="java.sql.Date"/>
+		<field name="_country" class="java.lang.String"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="_id" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="only_ncc" uuid="a91096dc-cf06-4478-95b1-557ae5b20024">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT *, IF (tbl._country = 'Oth',1,0) AS _id
+FROM (
+SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.country IS NOT NULL
+	THEN T9.country ELSE 'Oth'
+	END AS _country,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+	GROUP BY country
+	ORDER BY total_d DESC
+	LIMIT 9 /* Cambiar en 9 en PRO */
+) AS T9
+	ON tcn.mcc = T9.mcc
+WHERE ( fecha >= $P{from_date_d} AND fecha <= $P{to_date_d} ) AND (tcn.mcc <> 0 AND tcn.mnc <> 0)
+GROUP BY _country, _day
+ORDER BY total DESC, _day DESC) AS tbl
+ORDER BY _id, total DESC]]>
+		</queryString>
+		<field name="_day" class="java.sql.Date"/>
+		<field name="_country" class="java.lang.String"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="_id" class="java.lang.Long"/>
+	</subDataset>
+	<subDataset name="only_ncc_all" uuid="e498d804-27cd-42b9-ad91-e6cd4feb81c9">
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT _all._country,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total, IF (_all._country = 'Oth',1,0) AS _id
+FROM (
+SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T9.country IS NOT NULL
+	THEN T9.country ELSE 'Oth'
+	END AS _country,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
+	GROUP BY country
+	ORDER BY total_d DESC
+	LIMIT 9 /* Cambiar en 9 en PRO */
+) AS T9
+	ON tcn.mcc = T9.mcc
+WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha < $P{to_date_d}
+GROUP BY _country, _day
+ORDER BY _day ) _all
+WHERE _country <> 'OTT'
+GROUP BY _all._country
+ORDER BY _id ASC, total DESC]]>
+		</queryString>
+		<field name="_country" class="java.lang.String"/>
+		<field name="_MAX" class="java.math.BigDecimal"/>
+		<field name="_MIN" class="java.math.BigDecimal"/>
+		<field name="_AVG" class="java.math.BigDecimal"/>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="_id" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="from_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{range}.getStart()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to_date_d" class="java.util.Date">
+		<defaultValueExpression><![CDATA[$P{range_1}.getEnd()]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT MAX(tbl.total) AS MAX_period, MIN(tbl.total) AS MIN_period
+FROM(
+SELECT DATE(tcn.fecha) AS _day,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+WHERE (fecha >= $P{from_date_d} AND fecha <= $P{to_date_d} )
+GROUP BY _day
+ORDER BY _day, tcn.total DESC) AS tbl]]>
 	</queryString>
-	<field name="_day" class="java.sql.Date"/>
-	<field name="_country" class="java.lang.String"/>
-	<field name="total" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="MAX_period" class="java.math.BigDecimal"/>
+	<field name="MIN_period" class="java.math.BigDecimal"/>
+	<group name="graph_all">
+		<groupHeader>
+			<band height="443">
+				<pieChart>
+					<chart isShowLegend="true">
+						<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="245"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</chart>
+					<pieDataset>
+						<dataset>
+							<datasetRun subDataset="all_data" uuid="685c94b9-6a11-4cb7-a21e-f1bff0ec21e2">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<keyExpression><![CDATA[$F{_country}]]></keyExpression>
+						<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					</pieDataset>
+					<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
+						<plot>
+							<seriesColor seriesOrder="0" color="#19FFFF"/>
+							<seriesColor seriesOrder="1" color="#19BDC1"/>
+							<seriesColor seriesOrder="2" color="#3366FF"/>
+							<seriesColor seriesOrder="3" color="#054266"/>
+							<seriesColor seriesOrder="4" color="#B30003"/>
+							<seriesColor seriesOrder="5" color="#D11417"/>
+							<seriesColor seriesOrder="6" color="#E85A06"/>
+							<seriesColor seriesOrder="7" color="#F49B19"/>
+							<seriesColor seriesOrder="8" color="#FFFF5D"/>
+							<seriesColor seriesOrder="9" color="#999999"/>
+						</plot>
+						<itemLabel/>
+					</piePlot>
+				</pieChart>
+				<staticText>
+					<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="552" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
+				</staticText>
+				<timeSeriesChart>
+					<chart>
+						<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="26" y="43" width="511" height="275" isRemoveLineWhenBlank="true">
+							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
+						</reportElement>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend position="Bottom"/>
+					</chart>
+					<timeSeriesDataset>
+						<dataset>
+							<datasetRun subDataset="all_graph" uuid="49cc2c0a-37de-4369-90d7-81129342e144">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<timeSeries>
+							<seriesExpression><![CDATA[$F{_country}]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{total}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#19FFFF"/>
+							<seriesColor seriesOrder="1" color="#19BDC1"/>
+							<seriesColor seriesOrder="2" color="#3366FF"/>
+							<seriesColor seriesOrder="3" color="#054266"/>
+							<seriesColor seriesOrder="4" color="#B30003"/>
+							<seriesColor seriesOrder="5" color="#D11417"/>
+							<seriesColor seriesOrder="6" color="#E85A06"/>
+							<seriesColor seriesOrder="7" color="#F49B19"/>
+							<seriesColor seriesOrder="8" color="#FFFF5D"/>
+							<seriesColor seriesOrder="9" color="#999999"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont>
+									<font size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisFormat>
+							<axisFormat/>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<image>
+					<reportElement uuid="d1e0d9ff-a3a2-4a28-a9e1-4e6a5998d5c0" x="697" y="386" width="105" height="57"/>
+					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+				</image>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="graph_ncc">
+		<groupHeader>
+			<band height="443">
+				<image>
+					<reportElement uuid="007fd2dd-9db2-416b-9190-3026e8f09127" x="697" y="373" width="105" height="57"/>
+					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+				</image>
+				<pieChart>
+					<chart isShowLegend="true">
+						<reportElement uuid="14499c3e-1a51-47f7-8517-f9c3a73d7c10" x="572" y="72" width="202" height="245"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</chart>
+					<pieDataset>
+						<dataset>
+							<datasetRun subDataset="only_ncc_all" uuid="54946b60-8baf-44f5-a754-fb5cad807524">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<keyExpression><![CDATA[$F{_country}]]></keyExpression>
+						<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					</pieDataset>
+					<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
+						<plot>
+							<seriesColor seriesOrder="0" color="#19BDC1"/>
+							<seriesColor seriesOrder="1" color="#3366FF"/>
+							<seriesColor seriesOrder="2" color="#054266"/>
+							<seriesColor seriesOrder="3" color="#B30003"/>
+							<seriesColor seriesOrder="4" color="#D11417"/>
+							<seriesColor seriesOrder="5" color="#E85A06"/>
+							<seriesColor seriesOrder="6" color="#F49B19"/>
+							<seriesColor seriesOrder="7" color="#FFFF5D"/>
+							<seriesColor seriesOrder="8" color="#999999"/>
+						</plot>
+						<itemLabel/>
+					</piePlot>
+				</pieChart>
+				<timeSeriesChart>
+					<chart>
+						<reportElement uuid="125f432f-cbbd-4916-bead-fc65a50cae83" x="26" y="42" width="511" height="275" isRemoveLineWhenBlank="true">
+							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
+						</reportElement>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend position="Bottom"/>
+					</chart>
+					<timeSeriesDataset>
+						<dataset>
+							<datasetRun subDataset="only_ncc" uuid="076d5ac3-449e-42cb-a4a8-f8c64b202711">
+								<datasetParameter name="from_date_d">
+									<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+								<datasetParameter name="to_date_d">
+									<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<timeSeries>
+							<seriesExpression><![CDATA[$F{_country}]]></seriesExpression>
+							<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
+							<valueExpression><![CDATA[$F{total}]]></valueExpression>
+						</timeSeries>
+					</timeSeriesDataset>
+					<timeSeriesPlot>
+						<plot>
+							<seriesColor seriesOrder="0" color="#19BDC1"/>
+							<seriesColor seriesOrder="1" color="#3366FF"/>
+							<seriesColor seriesOrder="2" color="#054266"/>
+							<seriesColor seriesOrder="3" color="#B30003"/>
+							<seriesColor seriesOrder="4" color="#D11417"/>
+							<seriesColor seriesOrder="5" color="#E85A06"/>
+							<seriesColor seriesOrder="6" color="#F49B19"/>
+							<seriesColor seriesOrder="7" color="#FFFF5D"/>
+							<seriesColor seriesOrder="8" color="#999999"/>
+						</plot>
+						<timeAxisFormat>
+							<axisFormat>
+								<labelFont>
+									<font size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</timeAxisFormat>
+						<valueAxisFormat>
+							<axisFormat/>
+						</valueAxisFormat>
+					</timeSeriesPlot>
+				</timeSeriesChart>
+				<staticText>
+					<reportElement uuid="32174d7a-758e-4c4f-bb45-bbc336500b43" mode="Transparent" x="10" y="10" width="503" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day  - excluding Wifi]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band height="443" splitType="Stretch">
 			<staticText>
@@ -427,99 +756,25 @@ ORDER BY _id, total DESC]]>
 				<reportElement uuid="974f7017-654e-4a20-9fcb-14c7547b210d" x="611" y="-104" width="145" height="71"/>
 				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
 			</image>
-			<image>
-				<reportElement uuid="76888379-2a95-40da-a50b-5c96e18c9d4d" x="658" y="334" width="95" height="95"/>
-				<imageExpression><![CDATA["repo:/OWD/components/foxsit.jpg"]]></imageExpression>
-			</image>
 		</band>
 	</background>
 	<summary>
 		<band height="443">
-			<staticText>
-				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="46" y="329" width="126" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Summary]]></text>
-			</staticText>
-			<timeSeriesChart>
-				<chart>
-					<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" x="26" y="43" width="511" height="275" isRemoveLineWhenBlank="true">
-						<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
-					</reportElement>
-					<chartTitle/>
-					<chartSubtitle/>
-					<chartLegend position="Bottom"/>
-				</chart>
-				<timeSeriesDataset>
-					<timeSeries>
-						<seriesExpression><![CDATA[$F{_country}]]></seriesExpression>
-						<timePeriodExpression><![CDATA[$F{_day}]]></timePeriodExpression>
-						<valueExpression><![CDATA[$F{total}]]></valueExpression>
-					</timeSeries>
-				</timeSeriesDataset>
-				<timeSeriesPlot>
-					<plot>
-						<seriesColor seriesOrder="0" color="#19FFFF"/>
-						<seriesColor seriesOrder="1" color="#19BDC1"/>
-						<seriesColor seriesOrder="2" color="#3366FF"/>
-						<seriesColor seriesOrder="3" color="#054266"/>
-						<seriesColor seriesOrder="4" color="#B30003"/>
-						<seriesColor seriesOrder="5" color="#D11417"/>
-						<seriesColor seriesOrder="6" color="#E85A06"/>
-						<seriesColor seriesOrder="7" color="#F49B19"/>
-						<seriesColor seriesOrder="8" color="#FFFF5D"/>
-						<seriesColor seriesOrder="9" color="#999999"/>
-					</plot>
-					<timeAxisFormat>
-						<axisFormat>
-							<labelFont>
-								<font size="8"/>
-							</labelFont>
-							<tickLabelFont>
-								<font size="8"/>
-							</tickLabelFont>
-						</axisFormat>
-					</timeAxisFormat>
-					<valueAxisFormat>
-						<axisFormat/>
-					</valueAxisFormat>
-				</timeSeriesPlot>
-			</timeSeriesChart>
-			<pieChart>
-				<chart isShowLegend="false">
-					<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="572" y="73" width="202" height="168"/>
-					<chartTitle/>
-					<chartSubtitle/>
-					<chartLegend/>
-				</chart>
-				<pieDataset>
-					<keyExpression><![CDATA[$F{_country}]]></keyExpression>
-					<valueExpression><![CDATA[$F{total}]]></valueExpression>
-				</pieDataset>
-				<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
-					<plot>
-						<seriesColor seriesOrder="0" color="#19FFFF"/>
-						<seriesColor seriesOrder="1" color="#19BDC1"/>
-						<seriesColor seriesOrder="2" color="#3366FF"/>
-						<seriesColor seriesOrder="3" color="#054266"/>
-						<seriesColor seriesOrder="4" color="#B30003"/>
-						<seriesColor seriesOrder="5" color="#D11417"/>
-						<seriesColor seriesOrder="6" color="#E85A06"/>
-						<seriesColor seriesOrder="7" color="#F49B19"/>
-						<seriesColor seriesOrder="8" color="#FFFF5D"/>
-						<seriesColor seriesOrder="9" color="#999999"/>
-					</plot>
-					<itemLabel/>
-				</piePlot>
-			</pieChart>
 			<componentElement>
-				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="156" y="356" width="360" height="50"/>
+				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="180" y="56" width="360" height="50"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="all_data" uuid="13457d0b-224e-46bd-ba65-7dfc589364e1">
+					<datasetRun subDataset="all_data" uuid="3ed63d10-e14b-4a31-801a-87351fa4b0ef">
 						<datasetParameter name="from_date_d">
 							<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="to_date_d">
 							<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="max">
+							<datasetParameterExpression><![CDATA[$F{MAX_period}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="min">
+							<datasetParameterExpression><![CDATA[$F{MIN_period}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
@@ -595,8 +850,8 @@ ORDER BY _id, total DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+							<textField pattern="###0" isBlankWhenNull="false">
+								<reportElement uuid="a1e26564-f841-4c44-af7c-9e444785cf44" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -608,7 +863,7 @@ ORDER BY _id, total DESC]]>
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{max_dmax}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{max}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
@@ -648,8 +903,8 @@ ORDER BY _id, total DESC]]>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+							<textField pattern="###0" isBlankWhenNull="false">
+								<reportElement uuid="5e65b6e5-7a40-4a80-8140-f202a040fbae" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -661,7 +916,7 @@ ORDER BY _id, total DESC]]>
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{min_dmin}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{min}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
@@ -738,13 +993,14 @@ ORDER BY _id, total DESC]]>
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="34" y="14" width="503" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Number of terminals which connected to the push server at least once on the given day]]></text>
+				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="34" y="20" width="126" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Summary]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="76888379-2a95-40da-a50b-5c96e18c9d4d" x="658" y="334" width="95" height="95"/>
+				<imageExpression><![CDATA["repo:/OWD/components/foxsit.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</summary>
 </jasperReport>
