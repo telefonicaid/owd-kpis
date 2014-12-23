@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2014-12-22T12:10:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="355"/>
 	<property name="ireport.y" value="1025"/>
-	<property name="ireport.jasperserver.reportUnit" value="/OWD/Scheduled_reports/Connected_Terminlas_D_Network_R"/>
-	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Public/OWD/Scheduled_reports/Connected_Terminals_Network_Daily"/>
+	<property name="ireport.jasperserver.url" value="http://jasperprod.service.dsn.inet:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadminOWD"/>
+	<property name="ireport.jasperserver.report.resource" value="/Public/OWD/Scheduled_reports/Connected_Terminals_Network_Daily_files/Connected_Terminals_Network_Daily_"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KpisDbAdapter"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -289,8 +294,8 @@
 			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),2) AS _AVG, SUM(_all.total) AS total, IF (_all._alias = 'Others',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
-	CASE WHEN T14.alias IS NOT NULL
-	THEN T14.alias
+	CASE WHEN T16.alias IS NOT NULL
+	THEN T16.alias
 	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
@@ -310,9 +315,9 @@ LEFT JOIN
 	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
-	LIMIT 14
-) AS T14
-	ON op.alias = T14.alias
+	LIMIT 16
+) AS T16
+	ON op.alias = T16.alias
 WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY _alias, _day
 ORDER BY _day, tcn.total DESC) _all
@@ -354,8 +359,8 @@ ORDER BY _id ASC, total DESC]]>
 			<![CDATA[SELECT _all._alias,MAX(_all.total) AS _MAX, MIN(_all.total) AS _MIN, ROUND(AVG(_all.total),0) AS _AVG, SUM(_all.total) AS total, IF (_all._alias = 'Others',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
-	CASE WHEN T14.alias IS NOT NULL
-	THEN T14.alias
+	CASE WHEN T16.alias IS NOT NULL
+	THEN T16.alias
 	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
@@ -375,9 +380,9 @@ LEFT JOIN
 	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
-	LIMIT 14
-) AS T14
-	ON op.alias = T14.alias
+	LIMIT 16
+) AS T16
+	ON op.alias = T16.alias
 WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
 GROUP BY _alias, _day
 ORDER BY _day, tcn.total DESC) _all
@@ -405,8 +410,8 @@ ORDER BY _id ASC, total DESC]]>
 			<![CDATA[SELECT *, IF(t1._alias='Others',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
-	CASE WHEN T14.alias IS NOT NULL
-	THEN T14.alias
+	CASE WHEN T16.alias IS NOT NULL
+	THEN T16.alias
 	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
@@ -426,9 +431,9 @@ LEFT JOIN
 	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
-	LIMIT 14
-) AS T14
-	ON op.alias = T14.alias
+	LIMIT 16
+) AS T16
+	ON op.alias = T16.alias
 WHERE (tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d})
 GROUP BY _alias, _day
 ORDER BY _day ASC, total DESC ) t1
@@ -452,8 +457,8 @@ ORDER BY _day ASC, _id ASC, total DESC]]>
 			<![CDATA[SELECT *, IF(t1._alias='Others',1,0) AS _id
 FROM (
 SELECT DATE(tcn.fecha) AS _day,
-	CASE WHEN T14.alias IS NOT NULL
-	THEN T14.alias
+	CASE WHEN T16.alias IS NOT NULL
+	THEN T16.alias
 	ELSE 'Others'
 	END AS _alias,
 	SUM(tcn.total) AS total
@@ -473,9 +478,9 @@ LEFT JOIN
 	WHERE tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}
 	GROUP BY alias
 	ORDER BY total_d DESC
-	LIMIT 14
-) AS T14
-	ON op.alias = T14.alias
+	LIMIT 16
+) AS T16
+	ON op.alias = T16.alias
 WHERE (tcn.fecha >= $P{from_date_d} AND tcn.fecha <= $P{to_date_d}) AND (tcn.mcc <> 0 AND tcn.mnc <> 0)
 GROUP BY _alias, _day
 ORDER BY _day ASC, total DESC ) t1
@@ -580,7 +585,7 @@ SELECT  fecha, SUM(tcn.total) AS total, op.alias AS alias
 	GROUP BY alias, fecha ) AS _all
 GROUP by _all.alias
 ORDER by fecha ASC, total DESC
-LIMIT 14,200   /* TOP 14 NOW */
+LIMIT 16,200   /* TOP 16 NOW */
 ) tbl
 WHERE (tbl.alias like 'movistar%' OR tbl.alias like 'O2 DE')]]>
 		</queryString>
@@ -623,7 +628,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 			<band height="443">
 				<pieChart>
 					<chart isShowLegend="true">
-						<reportElement uuid="1e0aea8d-7789-4f6d-b38e-933055600403" x="545" y="53" width="257" height="291"/>
+						<reportElement x="545" y="53" width="257" height="291" uuid="1e0aea8d-7789-4f6d-b38e-933055600403"/>
 						<chartTitle/>
 						<chartSubtitle/>
 						<chartLegend/>
@@ -644,40 +649,42 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					</pieDataset>
 					<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
 						<plot>
-							<seriesColor seriesOrder="0" color="#19FFFF"/>
-							<seriesColor seriesOrder="1" color="#19BDC1"/>
-							<seriesColor seriesOrder="2" color="#3366FF"/>
-							<seriesColor seriesOrder="3" color="#054266"/>
-							<seriesColor seriesOrder="4" color="#B30003"/>
-							<seriesColor seriesOrder="5" color="#D11417"/>
-							<seriesColor seriesOrder="6" color="#E85A06"/>
-							<seriesColor seriesOrder="7" color="#F49B19"/>
-							<seriesColor seriesOrder="8" color="#FFFF5D"/>
-							<seriesColor seriesOrder="9" color="#B4CC17"/>
-							<seriesColor seriesOrder="10" color="#0F8249"/>
-							<seriesColor seriesOrder="11" color="#3300CC"/>
-							<seriesColor seriesOrder="12" color="#00FF33"/>
-							<seriesColor seriesOrder="13" color="#990000"/>
-							<seriesColor seriesOrder="14" color="#999999"/>
+							<seriesColor seriesOrder="0" color="#19BDC1"/>
+							<seriesColor seriesOrder="1" color="#3366FF"/>
+							<seriesColor seriesOrder="2" color="#054266"/>
+							<seriesColor seriesOrder="3" color="#B30003"/>
+							<seriesColor seriesOrder="4" color="#D11417"/>
+							<seriesColor seriesOrder="5" color="#E85A06"/>
+							<seriesColor seriesOrder="6" color="#F49B19"/>
+							<seriesColor seriesOrder="7" color="#FFFF5D"/>
+							<seriesColor seriesOrder="8" color="#B4CC17"/>
+							<seriesColor seriesOrder="9" color="#0F8249"/>
+							<seriesColor seriesOrder="10" color="#3300CC"/>
+							<seriesColor seriesOrder="11" color="#00FF33"/>
+							<seriesColor seriesOrder="12" color="#992300"/>
+							<seriesColor seriesOrder="13" color="#24FF8A"/>
+							<seriesColor seriesOrder="14" color="#F142ED"/>
+							<seriesColor seriesOrder="15" color="#34EE22"/>
+							<seriesColor seriesOrder="16" color="#666666"/>
 						</plot>
 						<itemLabel/>
 					</piePlot>
 				</pieChart>
 				<image>
-					<reportElement uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4" x="697" y="386" width="105" height="57"/>
-					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+					<reportElement x="697" y="386" width="105" height="57" uuid="d5ff5b09-a142-4bd5-8dfa-a463020fd2f4"/>
+					<imageExpression><![CDATA["repo:fox.jpg"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6" mode="Transparent" x="21" y="17" width="590" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement mode="Transparent" x="21" y="17" width="590" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="fc39f63e-8979-4119-bc04-0e8661f67cb6"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day - top 13 networks plus Wifi.]]></text>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day - top 15 networks plus Wifi.]]></text>
 				</staticText>
 				<timeSeriesChart>
 					<chart>
-						<reportElement uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162" isPrintRepeatedValues="false" x="21" y="53" width="511" height="291">
+						<reportElement isPrintRepeatedValues="false" x="21" y="53" width="511" height="291" uuid="7e9b7267-3d4d-494f-acf0-ffccefbc0162">
 							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 						</reportElement>
 						<chartTitle/>
@@ -703,21 +710,23 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					</timeSeriesDataset>
 					<timeSeriesPlot isShowLines="true" isShowShapes="true">
 						<plot>
-							<seriesColor seriesOrder="0" color="#19FFFF"/>
-							<seriesColor seriesOrder="1" color="#19BDC1"/>
-							<seriesColor seriesOrder="2" color="#3366FF"/>
-							<seriesColor seriesOrder="3" color="#054266"/>
-							<seriesColor seriesOrder="4" color="#B30003"/>
-							<seriesColor seriesOrder="5" color="#D11417"/>
-							<seriesColor seriesOrder="6" color="#E85A06"/>
-							<seriesColor seriesOrder="7" color="#F49B19"/>
-							<seriesColor seriesOrder="8" color="#FFFF5D"/>
-							<seriesColor seriesOrder="9" color="#B4CC17"/>
-							<seriesColor seriesOrder="10" color="#0F8249"/>
-							<seriesColor seriesOrder="11" color="#3300CC"/>
-							<seriesColor seriesOrder="12" color="#00FF33"/>
-							<seriesColor seriesOrder="13" color="#990000"/>
-							<seriesColor seriesOrder="14" color="#999999"/>
+							<seriesColor seriesOrder="0" color="#19BDC1"/>
+							<seriesColor seriesOrder="1" color="#3366FF"/>
+							<seriesColor seriesOrder="2" color="#054266"/>
+							<seriesColor seriesOrder="3" color="#B30003"/>
+							<seriesColor seriesOrder="4" color="#D11417"/>
+							<seriesColor seriesOrder="5" color="#E85A06"/>
+							<seriesColor seriesOrder="6" color="#F49B19"/>
+							<seriesColor seriesOrder="7" color="#FFFF5D"/>
+							<seriesColor seriesOrder="8" color="#B4CC17"/>
+							<seriesColor seriesOrder="9" color="#0F8249"/>
+							<seriesColor seriesOrder="10" color="#3300CC"/>
+							<seriesColor seriesOrder="11" color="#00FF33"/>
+							<seriesColor seriesOrder="12" color="#992300"/>
+							<seriesColor seriesOrder="13" color="#24FF8A"/>
+							<seriesColor seriesOrder="14" color="#F142ED"/>
+							<seriesColor seriesOrder="15" color="#34EE22"/>
+							<seriesColor seriesOrder="16" color="#666666"/>
 						</plot>
 						<timeAxisFormat>
 							<axisFormat verticalTickLabels="false">
@@ -742,7 +751,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 			<band height="443">
 				<pieChart>
 					<chart isShowLegend="true">
-						<reportElement uuid="fb8a7a17-d9e6-4da6-8388-2fb5fbc427df" mode="Transparent" x="545" y="53" width="257" height="291" forecolor="#000000" backcolor="#FFFFFF"/>
+						<reportElement mode="Transparent" x="545" y="53" width="257" height="291" forecolor="#000000" backcolor="#FFFFFF" uuid="fb8a7a17-d9e6-4da6-8388-2fb5fbc427df"/>
 						<chartTitle/>
 						<chartSubtitle/>
 						<chartLegend/>
@@ -763,39 +772,41 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					</pieDataset>
 					<piePlot isShowLabels="true" isCircular="true" labelFormat="{2}" legendLabelFormat="{0}">
 						<plot>
-							<seriesColor seriesOrder="0" color="#19BDC1"/>
-							<seriesColor seriesOrder="1" color="#3366FF"/>
-							<seriesColor seriesOrder="2" color="#054266"/>
-							<seriesColor seriesOrder="3" color="#B30003"/>
-							<seriesColor seriesOrder="4" color="#D11417"/>
-							<seriesColor seriesOrder="5" color="#E85A06"/>
-							<seriesColor seriesOrder="6" color="#F49B19"/>
-							<seriesColor seriesOrder="7" color="#FFFF5D"/>
-							<seriesColor seriesOrder="8" color="#B4CC17"/>
-							<seriesColor seriesOrder="9" color="#0F8249"/>
-							<seriesColor seriesOrder="10" color="#3300CC"/>
-							<seriesColor seriesOrder="11" color="#00FF33"/>
-							<seriesColor seriesOrder="12" color="#990000"/>
-							<seriesColor seriesOrder="13" color="#999999"/>
+							<seriesColor seriesOrder="0" color="#3366FF"/>
+							<seriesColor seriesOrder="1" color="#054266"/>
+							<seriesColor seriesOrder="2" color="#B30003"/>
+							<seriesColor seriesOrder="3" color="#D11417"/>
+							<seriesColor seriesOrder="4" color="#E85A06"/>
+							<seriesColor seriesOrder="5" color="#F49B19"/>
+							<seriesColor seriesOrder="6" color="#FFFF5D"/>
+							<seriesColor seriesOrder="7" color="#B4CC17"/>
+							<seriesColor seriesOrder="8" color="#0F8249"/>
+							<seriesColor seriesOrder="9" color="#3300CC"/>
+							<seriesColor seriesOrder="10" color="#00FF33"/>
+							<seriesColor seriesOrder="11" color="#992300"/>
+							<seriesColor seriesOrder="12" color="#24FF8A"/>
+							<seriesColor seriesOrder="13" color="#F142ED"/>
+							<seriesColor seriesOrder="14" color="#34EE22"/>
+							<seriesColor seriesOrder="15" color="#666666"/>
 						</plot>
 						<itemLabel/>
 					</piePlot>
 				</pieChart>
 				<staticText>
-					<reportElement uuid="48a86d0b-04b5-4d40-8e1d-08b83f0ea6d6" mode="Transparent" x="21" y="17" width="617" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement mode="Transparent" x="21" y="17" width="617" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="48a86d0b-04b5-4d40-8e1d-08b83f0ea6d6"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day - top 13 networks excluding Wifi.]]></text>
+					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day - top 15 networks excluding Wifi.]]></text>
 				</staticText>
 				<image>
-					<reportElement uuid="a4c385db-5e20-47ad-b69c-8bf3f53dac60" x="697" y="386" width="105" height="57"/>
-					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+					<reportElement x="697" y="386" width="105" height="57" uuid="a4c385db-5e20-47ad-b69c-8bf3f53dac60"/>
+					<imageExpression><![CDATA["repo:fox.jpg"]]></imageExpression>
 				</image>
 				<timeSeriesChart>
 					<chart>
-						<reportElement uuid="881b5915-641b-444e-b8e0-db2d4348d4f1" isPrintRepeatedValues="false" x="21" y="53" width="511" height="291">
+						<reportElement isPrintRepeatedValues="false" x="21" y="53" width="511" height="291" uuid="881b5915-641b-444e-b8e0-db2d4348d4f1">
 							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 						</reportElement>
 						<chartTitle/>
@@ -821,20 +832,22 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					</timeSeriesDataset>
 					<timeSeriesPlot isShowLines="true" isShowShapes="true">
 						<plot>
-							<seriesColor seriesOrder="0" color="#19BDC1"/>
-							<seriesColor seriesOrder="1" color="#3366FF"/>
-							<seriesColor seriesOrder="2" color="#054266"/>
-							<seriesColor seriesOrder="3" color="#B30003"/>
-							<seriesColor seriesOrder="4" color="#D11417"/>
-							<seriesColor seriesOrder="5" color="#E85A06"/>
-							<seriesColor seriesOrder="6" color="#F49B19"/>
-							<seriesColor seriesOrder="7" color="#FFFF5D"/>
-							<seriesColor seriesOrder="8" color="#B4CC17"/>
-							<seriesColor seriesOrder="9" color="#0F8249"/>
-							<seriesColor seriesOrder="10" color="#3300CC"/>
-							<seriesColor seriesOrder="11" color="#00FF33"/>
-							<seriesColor seriesOrder="12" color="#990000"/>
-							<seriesColor seriesOrder="13" color="#999999"/>
+							<seriesColor seriesOrder="0" color="#3366FF"/>
+							<seriesColor seriesOrder="1" color="#054266"/>
+							<seriesColor seriesOrder="2" color="#B30003"/>
+							<seriesColor seriesOrder="3" color="#D11417"/>
+							<seriesColor seriesOrder="4" color="#E85A06"/>
+							<seriesColor seriesOrder="5" color="#F49B19"/>
+							<seriesColor seriesOrder="6" color="#FFFF5D"/>
+							<seriesColor seriesOrder="7" color="#B4CC17"/>
+							<seriesColor seriesOrder="8" color="#0F8249"/>
+							<seriesColor seriesOrder="9" color="#3300CC"/>
+							<seriesColor seriesOrder="10" color="#00FF33"/>
+							<seriesColor seriesOrder="11" color="#992300"/>
+							<seriesColor seriesOrder="12" color="#24FF8A"/>
+							<seriesColor seriesOrder="13" color="#F142ED"/>
+							<seriesColor seriesOrder="14" color="#34EE22"/>
+							<seriesColor seriesOrder="15" color="#666666"/>
 						</plot>
 						<timeAxisFormat>
 							<axisFormat verticalTickLabels="false">
@@ -858,7 +871,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 		<groupHeader>
 			<band height="443">
 				<staticText>
-					<reportElement uuid="81255449-0a60-4bcb-bb30-3715479ff883" mode="Transparent" x="21" y="17" width="676" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement mode="Transparent" x="21" y="17" width="676" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="81255449-0a60-4bcb-bb30-3715479ff883"/>
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -866,12 +879,12 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<text><![CDATA[Number of terminals which connected to the push server at least once on the given day - Telefonica Firefox OS countries.]]></text>
 				</staticText>
 				<image>
-					<reportElement uuid="5e742d22-276b-45b8-a39e-93aa143d369e" x="697" y="386" width="105" height="57"/>
-					<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+					<reportElement x="697" y="386" width="105" height="57" uuid="5e742d22-276b-45b8-a39e-93aa143d369e"/>
+					<imageExpression><![CDATA["repo:fox.jpg"]]></imageExpression>
 				</image>
 				<pieChart>
 					<chart isShowLegend="true">
-						<reportElement uuid="06cc7b14-b3fe-4635-ad02-c41cad9f886d" x="545" y="53" width="257" height="291"/>
+						<reportElement x="545" y="53" width="257" height="291" uuid="06cc7b14-b3fe-4635-ad02-c41cad9f886d"/>
 						<chartTitle/>
 						<chartSubtitle/>
 						<chartLegend/>
@@ -904,15 +917,17 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 							<seriesColor seriesOrder="9" color="#0F8249"/>
 							<seriesColor seriesOrder="10" color="#3300CC"/>
 							<seriesColor seriesOrder="11" color="#00FF33"/>
-							<seriesColor seriesOrder="12" color="#990000"/>
-							<seriesColor seriesOrder="13" color="#999999"/>
+							<seriesColor seriesOrder="12" color="#992300"/>
+							<seriesColor seriesOrder="13" color="#24FF8A"/>
+							<seriesColor seriesOrder="14" color="#F142ED"/>
+							<seriesColor seriesOrder="15" color="#777777"/>
 						</plot>
 						<itemLabel/>
 					</piePlot>
 				</pieChart>
 				<timeSeriesChart>
 					<chart>
-						<reportElement uuid="e37766cd-9582-481b-bee9-b4d940556e5d" isPrintRepeatedValues="false" x="21" y="53" width="511" height="291">
+						<reportElement isPrintRepeatedValues="false" x="21" y="53" width="511" height="291" uuid="e37766cd-9582-481b-bee9-b4d940556e5d">
 							<property name="net.sf.jasperreports.chart.range.axis.integer.unit" value="TRUE"/>
 						</reportElement>
 						<chartTitle/>
@@ -950,8 +965,10 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 							<seriesColor seriesOrder="9" color="#0F8249"/>
 							<seriesColor seriesOrder="10" color="#3300CC"/>
 							<seriesColor seriesOrder="11" color="#00FF33"/>
-							<seriesColor seriesOrder="12" color="#990000"/>
-							<seriesColor seriesOrder="13" color="#999999"/>
+							<seriesColor seriesOrder="12" color="#992300"/>
+							<seriesColor seriesOrder="13" color="#24FF8A"/>
+							<seriesColor seriesOrder="14" color="#F142ED"/>
+							<seriesColor seriesOrder="15" color="#777777"/>
 						</plot>
 						<timeAxisFormat>
 							<axisFormat verticalTickLabels="false">
@@ -974,21 +991,21 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 	<background>
 		<band height="443" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="21" y="-104" width="416" height="31"/>
+				<reportElement x="21" y="-104" width="416" height="31" uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Daily Connected Terminals per Network]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="21" y="-53" width="223" height="20"/>
+				<reportElement x="21" y="-53" width="223" height="20" uuid="ea08a940-5656-435e-9bbb-46209142b228"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="15"/>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="cc6c5e56-b570-402e-83a8-4f95249d2bba" mode="Transparent" x="21" y="-73" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="21" y="-73" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="cc6c5e56-b570-402e-83a8-4f95249d2bba"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -996,7 +1013,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="2cd30490-5008-4754-b75e-a17fc8c60fc0" mode="Transparent" x="108" y="-73" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="108" y="-73" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2cd30490-5008-4754-b75e-a17fc8c60fc0">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1006,7 +1023,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f404e112-c964-403b-8c0f-fbdbde0bbfcb" mode="Transparent" x="95" y="-73" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="95" y="-73" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f404e112-c964-403b-8c0f-fbdbde0bbfcb">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -1016,15 +1033,15 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 				<text><![CDATA[to]]></text>
 			</staticText>
 			<image>
-				<reportElement uuid="974f7017-654e-4a20-9fcb-14c7547b210d" x="611" y="-104" width="145" height="71"/>
-				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
+				<reportElement x="611" y="-104" width="145" height="71" uuid="974f7017-654e-4a20-9fcb-14c7547b210d"/>
+				<imageExpression><![CDATA["repo:tid_ffos.gif"]]></imageExpression>
 			</image>
 		</band>
 	</background>
 	<summary>
 		<band height="443">
 			<componentElement>
-				<reportElement uuid="1fa5428b-55ae-42d6-9148-94099b53eedd" key="table 12" x="113" y="26" width="429" height="107"/>
+				<reportElement key="table 12" x="113" y="26" width="429" height="107" uuid="1fa5428b-55ae-42d6-9148-94099b53eedd"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="all_data" uuid="ec1cc80e-c5ae-4fed-af53-4de5aa42bbf0">
 						<datasetParameter name="from_date_d">
@@ -1044,7 +1061,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="150" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0" mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1061,7 +1078,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="f15261c0-cd82-43c5-8844-dfeae0845488" mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003" uuid="f15261c0-cd82-43c5-8844-dfeae0845488"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1078,7 +1095,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003" uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1097,7 +1114,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="fa6318cd-1c29-484c-a7fd-8a25983568ff">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="5bb43c38-cfac-4594-bf06-43ab69d7e481" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="5bb43c38-cfac-4594-bf06-43ab69d7e481"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1114,7 +1131,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1131,7 +1148,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="e8414f17-4219-4720-b8ad-2babd37c92b2" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="e8414f17-4219-4720-b8ad-2babd37c92b2"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1150,7 +1167,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="8a400733-1e85-4171-b5cd-06e027b31dae">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="e5a9e842-0256-4468-8bc5-2505a5560072" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="e5a9e842-0256-4468-8bc5-2505a5560072"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1167,7 +1184,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9f990f67-ded0-4587-85a8-4cebd9472d31" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="9f990f67-ded0-4587-85a8-4cebd9472d31"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1184,7 +1201,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1203,7 +1220,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="7de2ea11-6a45-46d1-b544-a91b354400d7">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="fde735fd-ebdc-449f-87cd-69030fb803dd" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="fde735fd-ebdc-449f-87cd-69030fb803dd"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1220,7 +1237,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnHeader>
 						<jr:columnFooter height="15" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611" mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1237,7 +1254,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1256,16 +1273,21 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc" x="73" y="1" width="189" height="20"/>
+				<reportElement x="73" y="1" width="189" height="20" uuid="3f5c8709-98df-4aad-aee2-4ace7d9072dc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Summary - top 13 networks plus Wifi]]></text>
+				<text><![CDATA[Summary - top 15 networks plus Wifi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="300" width="126" height="20" uuid="da7c8ee6-8805-4b4f-9534-d5c41a138867"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Other Telefónica OBs]]></text>
 			</staticText>
 			<image>
-				<reportElement uuid="5b8bb9e6-d713-490a-a5bb-a097dbcf874b" x="555" y="294" width="201" height="132"/>
-				<imageExpression><![CDATA["repo:/OWD/components/ffos2_h20"]]></imageExpression>
+				<reportElement x="560" y="70" width="240" height="264" uuid="96bddaff-24c9-4042-97db-446905ce1c97"/>
+				<imageExpression><![CDATA["repo:fox_h2o.jpg"]]></imageExpression>
 			</image>
 			<componentElement>
-				<reportElement uuid="360bb388-93f8-499f-98e8-18ced070b1c0" key="table 12" mode="Opaque" x="113" y="294" width="429" height="77" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="table 12" mode="Opaque" x="113" y="320" width="429" height="77" forecolor="#000000" backcolor="#FFFFFF" uuid="360bb388-93f8-499f-98e8-18ced070b1c0"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="table_restOB" uuid="46f5bea5-b8b5-4b6f-826d-db5b7efa20ff">
 						<datasetParameter name="from_date_d">
@@ -1279,7 +1301,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="150" uuid="9d3759d3-776a-4a8d-be5e-f6b3bd48b17c">
 						<jr:tableHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="bf60ba84-a1b1-4472-b5fe-f5eff8bf05fa" mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="bf60ba84-a1b1-4472-b5fe-f5eff8bf05fa"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1296,7 +1318,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:tableHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="45b08211-1124-4708-8f37-88a3d5370ad5" style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003" uuid="45b08211-1124-4708-8f37-88a3d5370ad5"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1315,7 +1337,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="966f3a51-c089-4a18-98c8-f931a7974a54">
 						<jr:tableHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="8221c5bc-df38-4a5a-9da6-d7f6234631ff" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="8221c5bc-df38-4a5a-9da6-d7f6234631ff"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1332,7 +1354,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:tableHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="55df588c-fb9e-4d1e-b79c-bd67489ea1c3" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="55df588c-fb9e-4d1e-b79c-bd67489ea1c3"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1351,7 +1373,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="61e4e27c-9d9a-40c8-89bb-1e00801853bb">
 						<jr:tableHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="b86932c2-88c8-4006-a448-e0d2de259ecb" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="b86932c2-88c8-4006-a448-e0d2de259ecb"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1368,7 +1390,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:tableHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="87df39f6-2be3-4f87-8ced-9d29b71eebc4" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="87df39f6-2be3-4f87-8ced-9d29b71eebc4"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1387,7 +1409,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					<jr:column width="90" uuid="dd296a2f-aa06-4086-bdf9-f85702524e72">
 						<jr:tableHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="1bd66394-0e42-47f3-9bc1-f1b52bb67806" mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="1bd66394-0e42-47f3-9bc1-f1b52bb67806"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1404,7 +1426,7 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:tableHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="7dec24b1-9784-4a98-8079-4a130c9506b1" style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="7dec24b1-9784-4a98-8079-4a130c9506b1"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1422,11 +1444,6 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<staticText>
-				<reportElement uuid="da7c8ee6-8805-4b4f-9534-d5c41a138867" x="81" y="266" width="126" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Other Telefónica OBs]]></text>
-			</staticText>
 		</band>
 	</summary>
 </jasperReport>
