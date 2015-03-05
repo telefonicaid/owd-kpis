@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-03-05T10:33:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" printOrder="Horizontal" pageWidth="750" pageHeight="900" orientation="Landscape" columnWidth="710" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="1497"/>
-	<property name="ireport.jasperserver.reportUnit" value="/OWD/Scheduled_reports/IncomingNotificationsIP_HD_R"/>
-	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Public/OWD/Scheduled_reports/Incoming_IP_Notifications_Daily_1"/>
+	<property name="ireport.jasperserver.url" value="http://jasperprod.service.dsn.inet:8080/jasperserver/"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KpisDbAdapter"/>
+	<property name="ireport.jasperserver.user" value="jasperadminOWD"/>
+	<property name="ireport.jasperserver.report.resource" value="/Public/OWD/Scheduled_reports/Incoming_IP_Notifications_Daily_1_files/Incoming_IP_Notifications_Daily_"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -388,7 +393,7 @@ FROM (
 SELECT cal.calendar_datetime AS fecha, tbl.total AS total,
 CASE tbl._ip
 WHEN 'Line' THEN 'Line'
-WHEN 'Telegram PRO' THEN 'Telegram PRO'
+WHEN 'Telegram' THEN 'Telegram'
 ELSE 'Others' END AS _ip
 FROM(
 SELECT ne.fecha,
@@ -425,7 +430,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 	<background>
 		<band height="762" splitType="Stretch">
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7" mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -433,7 +438,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="12c34cd8-da63-479c-90f9-d0cb7540bc88" mode="Transparent" x="123" y="-64" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="123" y="-64" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="12c34cd8-da63-479c-90f9-d0cb7540bc88">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -443,7 +448,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 				<text><![CDATA[to]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="08ca1047-f7c0-4224-b047-735f1a964957" mode="Transparent" x="136" y="-64" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="136" y="-64" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="08ca1047-f7c0-4224-b047-735f1a964957">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -453,39 +458,30 @@ ORDER by fecha, _id ASC, total DESC]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="49" y="-92" width="394" height="26"/>
+				<reportElement x="49" y="-92" width="394" height="26" uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Hourly Incoming Notifications per source]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="49" y="-43" width="219" height="20"/>
+				<reportElement x="49" y="-43" width="219" height="20" uuid="ea08a940-5656-435e-9bbb-46209142b228"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="15"/>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server ]]></text>
 			</staticText>
-			<image>
-				<reportElement uuid="5d1927ce-8f6f-4ba7-b9b0-f192f86ce450" x="485" y="-85" width="174" height="85"/>
-				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
-			</image>
-			<image>
-				<reportElement uuid="bcdf74de-418e-4fe3-958d-aa11261613b1" x="70" y="485" width="250" height="250"/>
-				<imageExpression><![CDATA["repo:/OWD/components/fox_h2o.jpg"]]></imageExpression>
-			</image>
 		</band>
 	</background>
 	<summary>
 		<band height="690">
 			<staticText>
-				<reportElement uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b" x="55" y="4" width="139" height="20"/>
-				<textElement/>
+				<reportElement x="55" y="4" width="139" height="20" uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b"/>
 				<text><![CDATA[Top sources of notifications]]></text>
 			</staticText>
 			<stackedBarChart>
 				<chart>
-					<reportElement uuid="9f687183-f95b-42f5-986e-d4c69b794c25" x="49" y="29" width="610" height="277"/>
+					<reportElement x="49" y="29" width="610" height="277" uuid="9f687183-f95b-42f5-986e-d4c69b794c25"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -521,13 +517,13 @@ ORDER by fecha, _id ASC, total DESC]]>
 				</barPlot>
 			</stackedBarChart>
 			<staticText>
-				<reportElement uuid="e5db01aa-b82e-4d53-b0e5-13863b2a4e27" x="49" y="343" width="56" height="20"/>
+				<reportElement x="49" y="343" width="56" height="20" uuid="e5db01aa-b82e-4d53-b0e5-13863b2a4e27"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<text><![CDATA[Summary]]></text>
 			</staticText>
 			<pieChart>
 				<chart isShowLegend="true">
-					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="415" y="343" width="244" height="206" forecolor="#000000" backcolor="#FFFFFF"/>
+					<reportElement mode="Transparent" x="415" y="343" width="244" height="206" forecolor="#000000" backcolor="#FFFFFF" uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend position="Bottom"/>
@@ -559,7 +555,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 				</piePlot>
 			</pieChart>
 			<componentElement>
-				<reportElement uuid="96633929-38a1-4a08-9cc1-02316d3c0100" key="table 10" style="AltBck" x="49" y="366" width="302" height="50" backcolor="#FFFFFF"/>
+				<reportElement key="table 10" style="AltBck" x="49" y="366" width="302" height="50" backcolor="#FFFFFF" uuid="96633929-38a1-4a08-9cc1-02316d3c0100"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="New Dataset 2" uuid="a7433f48-6d0f-404d-a139-567f4fe96409">
 						<datasetParameter name="From_date">
@@ -573,7 +569,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="78" uuid="94f39b99-7abc-46ae-bbfc-1f17be7ed1d6">
 						<jr:columnHeader style="table 10_TD" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="c5440930-6d93-47dd-b534-f36f47e9c7bd" style="AltBck" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement style="AltBck" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="c5440930-6d93-47dd-b534-f36f47e9c7bd"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -590,7 +586,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="c6fa691a-b55e-413a-8f70-6327e6778fbe" style="AltBck" x="0" y="0" width="78" height="15" forecolor="#666666"/>
+								<reportElement style="AltBck" x="0" y="0" width="78" height="15" forecolor="#666666" uuid="c6fa691a-b55e-413a-8f70-6327e6778fbe"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -609,7 +605,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="c0b6d4a4-0593-408d-aa48-0ac331c07895">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="4e1234f4-3b46-49cd-9fbc-8e42905bb98d" style="AltBck" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement style="AltBck" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="4e1234f4-3b46-49cd-9fbc-8e42905bb98d"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -619,7 +615,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="0f18be4e-8558-4b15-94ed-c45b6512d208" style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666"/>
+								<reportElement style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666" uuid="0f18be4e-8558-4b15-94ed-c45b6512d208"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -631,7 +627,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="00633c48-a3f5-4501-94b5-516d29498fa3">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="1b8ce2be-278a-454e-bf88-30fb6145e0ca" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="1b8ce2be-278a-454e-bf88-30fb6145e0ca"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -641,7 +637,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="e410fcda-af29-457e-973c-0d19ca172e73" style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666"/>
+								<reportElement style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666" uuid="e410fcda-af29-457e-973c-0d19ca172e73"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -653,7 +649,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="780d75d1-a2ee-42a8-97bc-66c66a3cebb4">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="80b6c12f-4059-44e3-9744-fd20a39ba08d" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="80b6c12f-4059-44e3-9744-fd20a39ba08d"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -663,7 +659,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField isBlankWhenNull="false">
-								<reportElement uuid="004fc60f-b239-473b-bbac-a41431d72349" style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666"/>
+								<reportElement style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666" uuid="004fc60f-b239-473b-bbac-a41431d72349"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -675,7 +671,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="2c8ac655-8b3f-4913-9043-8a76546ba381">
 						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="de247984-2a5b-47e4-99ef-90e55edd1845" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<reportElement mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="de247984-2a5b-47e4-99ef-90e55edd1845"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -685,7 +681,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 						</jr:columnHeader>
 						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="fd32b96f-6967-4065-b780-8d2e896be7d6" style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666"/>
+								<reportElement style="AltBck" x="0" y="0" width="68" height="15" forecolor="#666666" uuid="fd32b96f-6967-4065-b780-8d2e896be7d6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -697,7 +693,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement uuid="1628d90c-b508-4f39-868a-3ace896706d0" key="table 11" x="49" y="471" width="302" height="20"/>
+				<reportElement key="table 11" x="49" y="471" width="302" height="20" uuid="1628d90c-b508-4f39-868a-3ace896706d0"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Table Dataset 1" uuid="ac0424d5-f81f-4303-b342-96b0e35292cf">
 						<datasetParameter name="From_date">
@@ -711,7 +707,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="78" uuid="5f129b72-ffa6-4059-967f-ed8d345ac8cb">
 						<jr:detailCell height="15" rowSpan="1">
 							<staticText>
-								<reportElement uuid="d33aec53-1670-4ed1-9f2d-9a71c43b513a" style="table 10_TD" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<reportElement style="table 10_TD" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#666666" backcolor="#FFFFFF" uuid="d33aec53-1670-4ed1-9f2d-9a71c43b513a"/>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -730,7 +726,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="ffa20eb4-720c-4707-b55b-72841a907183">
 						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="ebfe7326-2e52-4960-97c7-0f18c753d684" style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<reportElement style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF" uuid="ebfe7326-2e52-4960-97c7-0f18c753d684"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -742,7 +738,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="11e7df31-daaf-4900-9888-ac13d9f9d184">
 						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement uuid="de8e402c-d4b4-422f-adf6-f240dec65ca0" style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<reportElement style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF" uuid="de8e402c-d4b4-422f-adf6-f240dec65ca0"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -754,7 +750,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="b2f14ab2-686c-4b85-964a-d4f187292e7e">
 						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="b5cf9129-5c43-4442-9a31-576b1984ce11" style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<reportElement style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF" uuid="b5cf9129-5c43-4442-9a31-576b1984ce11"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -766,7 +762,7 @@ ORDER by fecha, _id ASC, total DESC]]>
 					<jr:column width="68" uuid="b06153b5-d9c1-4c44-ac71-127dec11afac">
 						<jr:detailCell height="15" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement uuid="9281f601-cfcb-490c-991b-405b447dc0af" style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<reportElement style="table 10_TD" mode="Opaque" x="0" y="0" width="68" height="15" forecolor="#666666" backcolor="#FFFFFF" uuid="9281f601-cfcb-490c-991b-405b447dc0af"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 									<paragraph lineSpacing="Single"/>
@@ -780,3 +776,4 @@ ORDER by fecha, _id ASC, total DESC]]>
 		</band>
 	</summary>
 </jasperReport>
+

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2014-12-22T12:10:35 -->
+<!-- 2015-03-05T10:27:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="355"/>
@@ -281,7 +281,7 @@
 	</style>
 	<subDataset name="all_data" uuid="972a3d74-567d-41ba-80e9-b0f0107bddc5">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -350,7 +350,7 @@ ORDER BY _id ASC, total DESC]]>
 	</subDataset>
 	<subDataset name="only_ncc_all" uuid="d5961d4e-5c00-4f2d-9b7b-2506ab7fade9">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -401,7 +401,7 @@ ORDER BY _id ASC, total DESC]]>
 	</subDataset>
 	<subDataset name="all_grph" uuid="a8d31ed8-8e56-4fa2-803d-4f929148c8e7">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -448,7 +448,7 @@ ORDER BY _day ASC, _id ASC, total DESC]]>
 	</subDataset>
 	<subDataset name="only_ncc" uuid="e9677157-3b29-4406-b2f5-db3cf5f1420e">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -495,7 +495,7 @@ ORDER BY _day ASC, _id ASC, total DESC]]>
 	</subDataset>
 	<subDataset name="movistar_graph" uuid="61d25a3b-3840-449f-9054-27bc59369f70">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -529,7 +529,7 @@ ORDER by _all._day ASC, _id ASC, _all.total DESC]]>
 	</subDataset>
 	<subDataset name="movistar_ncc" uuid="46212d51-cfde-41f5-a3a2-a46e071122cd">
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="to_date_d" class="java.util.Date">
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
@@ -568,7 +568,7 @@ ORDER by _id ASC, total DESC]]>
 			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
 		</parameter>
 		<parameter name="from_date_d" class="java.util.Date">
-			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-7").toDateRange().getStart()]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
 		</parameter>
 		<queryString>
 			<![CDATA[SELECT *
@@ -600,7 +600,7 @@ WHERE (tbl.alias like 'movistar%' OR tbl.alias like 'O2 DE')]]>
 		</field>
 	</subDataset>
 	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-30").toDateRange()]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange()]]></defaultValueExpression>
 	</parameter>
 	<parameter name="range_1" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>

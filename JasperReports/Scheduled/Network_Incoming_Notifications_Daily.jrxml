@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
+<!-- 2015-03-05T10:31:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" printOrder="Horizontal" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="144"/>
-	<property name="ireport.jasperserver.reportUnit" value="/OWD/Scheduled_reports/Connected_Terminlas_D_Country_R_1"/>
-	<property name="ireport.jasperserver.url" value="http://10.26.204.184:8080/jasperserver-pro/services/repository"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Public/OWD/Scheduled_reports/Network_Incoming_Notifications_Daily"/>
+	<property name="ireport.jasperserver.url" value="http://jasperprod.service.dsn.inet:8080/jasperserver/"/>
+	<property name="ireport.jasperserver.user" value="jasperadminOWD"/>
+	<property name="ireport.jasperserver.report.resource" value="/Public/OWD/Scheduled_reports/Network_Incoming_Notifications_Daily_files/Network_Incoming_Notifications_Daily_"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -407,7 +411,7 @@ ORDER BY _day ASC, _id, total DESC]]>
 	<background>
 		<band height="443" splitType="Stretch">
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7" mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -415,7 +419,7 @@ ORDER BY _day ASC, _id, total DESC]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="12c34cd8-da63-479c-90f9-d0cb7540bc88" mode="Transparent" x="123" y="-64" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="123" y="-64" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="12c34cd8-da63-479c-90f9-d0cb7540bc88">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -425,7 +429,7 @@ ORDER BY _day ASC, _id, total DESC]]>
 				<text><![CDATA[to]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
-				<reportElement uuid="08ca1047-f7c0-4224-b047-735f1a964957" mode="Transparent" x="136" y="-64" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
+				<reportElement mode="Transparent" x="136" y="-64" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="08ca1047-f7c0-4224-b047-735f1a964957">
 					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{from_date_d})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})))]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
@@ -435,35 +439,34 @@ ORDER BY _day ASC, _id, total DESC]]>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{to_date_d})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="49" y="-92" width="394" height="26"/>
+				<reportElement x="49" y="-92" width="394" height="26" uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Daily Incoming Notifications per Network]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="49" y="-43" width="219" height="20"/>
+				<reportElement x="49" y="-43" width="219" height="20" uuid="ea08a940-5656-435e-9bbb-46209142b228"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="15"/>
 				</textElement>
 				<text><![CDATA[OWD Push Notification Server ]]></text>
 			</staticText>
 			<image>
-				<reportElement uuid="3c016531-b265-42b4-aa96-f4545787231b" x="621" y="-94" width="145" height="71"/>
-				<imageExpression><![CDATA["repo:/OWD/components/tid_ffos.gif"]]></imageExpression>
+				<reportElement x="621" y="-94" width="145" height="71" uuid="3c016531-b265-42b4-aa96-f4545787231b"/>
+				<imageExpression><![CDATA["repo:/Public/OWD/components/tid_ffos.gif"]]></imageExpression>
 			</image>
 		</band>
 	</background>
 	<summary>
 		<band height="443">
 			<staticText>
-				<reportElement uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b" x="49" y="9" width="168" height="20"/>
-				<textElement/>
+				<reportElement x="49" y="9" width="168" height="20" uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b"/>
 				<text><![CDATA[Number of incoming notifications ]]></text>
 			</staticText>
 			<pieChart>
 				<chart isShowLegend="true">
-					<reportElement uuid="06017f8c-8cb9-45b6-9433-61daaf32cf62" x="582" y="83" width="202" height="245"/>
+					<reportElement x="582" y="83" width="202" height="245" uuid="06017f8c-8cb9-45b6-9433-61daaf32cf62"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -500,7 +503,7 @@ ORDER BY _day ASC, _id, total DESC]]>
 			</pieChart>
 			<stackedBarChart>
 				<chart>
-					<reportElement uuid="ba6ff6b2-4e7c-4b05-8011-f71a50c64ac5" x="49" y="41" width="515" height="287"/>
+					<reportElement x="49" y="41" width="515" height="287" uuid="ba6ff6b2-4e7c-4b05-8011-f71a50c64ac5"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -543,8 +546,8 @@ ORDER BY _day ASC, _id, total DESC]]>
 				</barPlot>
 			</stackedBarChart>
 			<image>
-				<reportElement uuid="043fa466-95c4-4e47-a362-0feb1c859852" x="697" y="386" width="105" height="57"/>
-				<imageExpression><![CDATA["repo:/OWD/components/fox.jpg"]]></imageExpression>
+				<reportElement x="697" y="386" width="105" height="57" uuid="043fa466-95c4-4e47-a362-0feb1c859852"/>
+				<imageExpression><![CDATA["repo:/Public/OWD/components/fox.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</summary>
