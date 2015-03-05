@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="20" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="240"/>
+	<property name="ireport.jasperserver.reportUnit" value="/OWD/IncomingNotificationsIP_1"/>
+	<property name="ireport.jasperserver.url" value="http://10.26.236.184:8080/jasperserver-prepro/services/repository"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#FF7F50">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#FFD0BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#4169E1">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFCFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#4169E1">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFCFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TH" mode="Opaque" backcolor="#FF8C00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_CH" mode="Opaque" backcolor="#FFE2BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_TH" mode="Opaque" backcolor="#FF8C00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 9_CH" mode="Opaque" backcolor="#FFE2BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineColor="#CCCCCC"/>
+			<leftPen lineColor="#CCCCCC"/>
+			<bottomPen lineColor="#CCCCCC"/>
+			<rightPen lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="table 9_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineColor="#CCCCCC"/>
+			<leftPen lineColor="#CCCCCC"/>
+			<bottomPen lineColor="#CCCCCC"/>
+			<rightPen lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="AltBck" forecolor="#000000" backcolor="#B30003">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+			<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}.intValue() % 2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFFFE7">
+				<box>
+					<pen lineColor="#CCCCCC"/>
+					<topPen lineColor="#CCCCCC"/>
+					<leftPen lineColor="#CCCCCC"/>
+					<bottomPen lineColor="#CCCCCC"/>
+					<rightPen lineColor="#CCCCCC"/>
+				</box>
+			</style>
+		</conditionalStyle>
+	</style>
+	<style name="table 10">
+		<box>
+			<pen lineWidth="1.0" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="table 10_TH" mode="Opaque" backcolor="#FF8C00">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="table 10_CH" mode="Opaque" backcolor="#FFE2BF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<style name="table 10_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+	</style>
+	<subDataset name="New Dataset 2" uuid="b172348e-6753-4afd-bf44-b36e95bae0c4">
+		<parameter name="From_date" class="java.sql.Timestamp">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="To_date" class="java.sql.Timestamp">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT agr._ip AS ip, SUM(agr.total) AS total_all, MAX(agr.total) AS MAX_all, MIN(agr.total) AS MIN_all, IF (agr._ip = 'Others',1,0) AS _id
+FROM(
+SELECT ne.fecha,
+   	SUM(ne.total) as total,
+		IF (sa.alias IS NULL,(CASE WHEN T5.ip IS NOT NULL
+		THEN T5.ip
+		ELSE 'Others' END),sa.alias) AS _ip
+FROM kpisdb_rel.notificaciones_entrantes_agr ne
+LEFT JOIN kpisdb_rel.alias_ip_servidores_aplicaciones AS sa
+	ON ne.ip = sa.ip
+LEFT JOIN
+(
+	SELECT SUM(total) AS Total, ip
+	FROM kpisdb_rel.notificaciones_entrantes_agr
+	WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
+	GROUP BY ip
+	ORDER BY Total DESC
+	LIMIT 2 /*cambiar en PRO a 5*/
+) AS T5
+ON T5.ip = ne.ip
+WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}
+GROUP BY _ip, fecha) AS agr
+GROUP BY ip
+ORDER BY _id, ip]]>
+		</queryString>
+		<field name="ip" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="total_all" class="java.math.BigDecimal"/>
+		<field name="MAX_all" class="java.math.BigDecimal"/>
+		<field name="MIN_all" class="java.math.BigDecimal"/>
+		<field name="_id" class="java.lang.Long"/>
+		<variable name="num_intervals" class="java.lang.Integer">
+			<variableExpression><![CDATA[(($P{To_date}.getTime() - $P{From_date}.getTime())/(1000 * 60 * 60 ))+1]]></variableExpression>
+			<initialValueExpression><![CDATA[]]></initialValueExpression>
+		</variable>
+		<variable name="over_tot" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{total_all}]]></variableExpression>
+		</variable>
+		<variable name="over_min" class="java.lang.Integer" calculation="Lowest">
+			<variableExpression><![CDATA[$F{MIN_all}]]></variableExpression>
+		</variable>
+		<variable name="over_max" class="java.lang.Integer" calculation="Highest">
+			<variableExpression><![CDATA[$F{MAX_all}]]></variableExpression>
+		</variable>
+		<variable name="avg" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{total_all}/$V{num_intervals}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="last_day" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="From_date" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getStart().getTime())]]></defaultValueExpression>
+	</parameter>
+	<parameter name="To_date" class="java.sql.Timestamp">
+		<defaultValueExpression><![CDATA[new java.sql.Timestamp($P{last_day}.getEnd().getTime())]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT *, IF (tbl._ip = 'Others',1,0) AS _id
+FROM(
+SELECT ne.fecha,
+   	SUM(ne.total) as total,
+		IF (sa.alias IS NULL,(CASE WHEN T5.ip IS NOT NULL
+		THEN T5.ip
+		ELSE 'Others' END),sa.alias) AS _ip
+FROM kpisdb_rel.notificaciones_entrantes_agr ne
+LEFT JOIN kpisdb_rel.alias_ip_servidores_aplicaciones AS sa
+	ON ne.ip = sa.ip
+LEFT JOIN
+(
+	SELECT SUM(total) AS Total, ip
+	FROM kpisdb_rel.notificaciones_entrantes_agr
+	WHERE fecha >= $P{From_date} AND fecha < $P{To_date}
+	GROUP BY ip
+	ORDER BY Total DESC
+	LIMIT 2 /*cambiar en PRO a 5*/
+) AS T5
+ON T5.ip = ne.ip
+WHERE ne.fecha >= $P{From_date} AND ne.fecha < $P{To_date}
+GROUP BY _ip, fecha
+ORDER BY _ip DESC) AS tbl
+ORDER BY fecha, _id DESC]]>
+	</queryString>
+	<field name="fecha" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[viene de notificaciones_entrantes]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="_ip" class="java.lang.String"/>
+	<field name="_id" class="java.lang.Long"/>
+	<variable name="num_intervals" class="java.lang.Integer">
+		<variableExpression><![CDATA[(($P{To_date}.getTime() - $P{From_date}.getTime())/(1000 * 60 * 60 ))]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<background>
+		<band height="457" splitType="Stretch">
+			<image>
+				<reportElement uuid="d5b89845-796a-4cd4-8f8b-aced67197be6" x="655" y="-92" width="147" height="71"/>
+				<imageExpression><![CDATA["repo:/components/tid_ffos.gif"]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="f7bda9b0-2513-4dee-abbe-245a19595ad7" mode="Transparent" x="49" y="-64" width="74" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="12c34cd8-da63-479c-90f9-d0cb7540bc88" mode="Transparent" x="123" y="-64" width="13" height="20" forecolor="#000000" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[to]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="08ca1047-f7c0-4224-b047-735f1a964957" mode="Transparent" x="136" y="-64" width="100" height="20" forecolor="#000000" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[!((new SimpleDateFormat("dd-MM-yyyy").format($P{From_date})).equals(new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd-MM-yyyy").format($P{To_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bd5f9ed9-0a48-46c2-9391-5b0ae26c8e73" x="49" y="-92" width="394" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hourly Incoming Notifications per IP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea08a940-5656-435e-9bbb-46209142b228" x="49" y="-43" width="219" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[OWD Push Notification Server ]]></text>
+			</staticText>
+		</band>
+	</background>
+	<summary>
+		<band height="457">
+			<staticText>
+				<reportElement uuid="cf700756-bb03-4c36-bfb2-f65c3dd0945b" x="55" y="4" width="139" height="20"/>
+				<textElement/>
+				<text><![CDATA[Top sources of notifications]]></text>
+			</staticText>
+			<stackedBarChart>
+				<chart>
+					<reportElement uuid="9f687183-f95b-42f5-986e-d4c69b794c25" x="57" y="27" width="540" height="277"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{_ip}]]></seriesExpression>
+						<categoryExpression><![CDATA[new SimpleDateFormat("HH").format($F{fecha})]]></categoryExpression>
+						<valueExpression><![CDATA[$F{total}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="false" isShowTickLabels="true" isShowTickMarks="false">
+					<plot labelRotation="0.0">
+						<seriesColor seriesOrder="0" color="#999999"/>
+						<seriesColor seriesOrder="1" color="#B30003"/>
+						<seriesColor seriesOrder="2" color="#CD4909"/>
+						<seriesColor seriesOrder="3" color="#E85A06"/>
+						<seriesColor seriesOrder="4" color="#F49B19"/>
+						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+					</plot>
+					<itemLabel/>
+					<categoryAxisFormat labelRotation="0.0">
+						<axisFormat labelColor="#666666" verticalTickLabels="false">
+							<labelFont>
+								<font fontName="Verdana" size="4"/>
+							</labelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat verticalTickLabels="false">
+							<labelFont>
+								<font fontName="Elephant" size="5"/>
+							</labelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</stackedBarChart>
+			<staticText>
+				<reportElement uuid="e5db01aa-b82e-4d53-b0e5-13863b2a4e27" x="55" y="306" width="56" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Summary]]></text>
+			</staticText>
+			<pieChart>
+				<chart isShowLegend="false">
+					<reportElement uuid="2f1a2b52-3e84-4c27-8679-c30e6a2a4526" mode="Transparent" x="606" y="79" width="192" height="158" forecolor="#000000" backcolor="#FFFFFF"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{_ip}]]></keyExpression>
+					<valueExpression><![CDATA[$F{total}]]></valueExpression>
+				</pieDataset>
+				<piePlot isShowLabels="true" labelFormat="{2}">
+					<plot>
+						<seriesColor seriesOrder="0" color="#999999"/>
+						<seriesColor seriesOrder="1" color="#B30003"/>
+						<seriesColor seriesOrder="2" color="#CD4909"/>
+						<seriesColor seriesOrder="3" color="#E85A06"/>
+						<seriesColor seriesOrder="4" color="#F49B19"/>
+						<seriesColor seriesOrder="5" color="#FFFF5D"/>
+					</plot>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<image>
+				<reportElement uuid="1395d0a4-804d-4c2f-a9ac-2e4b1b853a9d" x="697" y="400" width="105" height="57"/>
+				<imageExpression><![CDATA["repo:/components/fox.jpg"]]></imageExpression>
+			</image>
+			<componentElement>
+				<reportElement uuid="96633929-38a1-4a08-9cc1-02316d3c0100" key="table 10" style="AltBck" x="154" y="330" width="360" height="50" backcolor="#FFFFFF"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="New Dataset 2" uuid="a7433f48-6d0f-404d-a139-567f4fe96409">
+						<datasetParameter name="From_date">
+							<datasetParameterExpression><![CDATA[$P{From_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="To_date">
+							<datasetParameterExpression><![CDATA[$P{To_date}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="78" uuid="94f39b99-7abc-46ae-bbfc-1f17be7ed1d6">
+						<jr:columnHeader style="table 10_TD" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="c5440930-6d93-47dd-b534-f36f47e9c7bd" style="AltBck" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[IP]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 10_TD" height="16" rowSpan="1">
+							<staticText>
+								<reportElement uuid="89181058-1855-43c1-bbc3-53b0d95529ca" style="table 10_TD" mode="Opaque" x="0" y="0" width="78" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="c6fa691a-b55e-413a-8f70-6327e6778fbe" style="AltBck" x="0" y="0" width="78" height="15" forecolor="#666666"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ip}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="c0b6d4a4-0593-408d-aa48-0ac331c07895">
+						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="4e1234f4-3b46-49cd-9fbc-8e42905bb98d" style="AltBck" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 10_TD" height="16" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="19f630f5-320e-441b-9f68-2e290b676965" style="table 10_TD" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{over_tot}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="0f18be4e-8558-4b15-94ed-c45b6512d208" style="AltBck" x="0" y="0" width="70" height="15" forecolor="#666666"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{total_all}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="00633c48-a3f5-4501-94b5-516d29498fa3">
+						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="1b8ce2be-278a-454e-bf88-30fb6145e0ca" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Hourly avg]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="16" rowSpan="1">
+							<textField pattern="###0" isBlankWhenNull="false">
+								<reportElement uuid="aa7b00db-6ee4-4e24-aafc-fc378b081874" mode="Opaque" x="0" y="0" width="70" height="16" forecolor="#666666" backcolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{avg}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField pattern="###0" isBlankWhenNull="false">
+								<reportElement uuid="e410fcda-af29-457e-973c-0d19ca172e73" style="AltBck" x="0" y="0" width="70" height="15" forecolor="#666666"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{total_all}/$V{num_intervals}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="780d75d1-a2ee-42a8-97bc-66c66a3cebb4">
+						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="80b6c12f-4059-44e3-9744-fd20a39ba08d" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Hourly max]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 10_TD" height="16" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="7f7ea54b-caa7-4571-afde-f5a77324bf02" style="table 10_TD" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{over_max}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField isBlankWhenNull="false">
+								<reportElement uuid="004fc60f-b239-473b-bbac-a41431d72349" style="AltBck" x="0" y="0" width="70" height="15" forecolor="#666666"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{MAX_all}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="2c8ac655-8b3f-4913-9043-8a76546ba381">
+						<jr:columnHeader style="table 10_CH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement uuid="de247984-2a5b-47e4-99ef-90e55edd1845" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#FFFFFF" backcolor="#F49B19"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Hourly min]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 10_TD" height="16" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="fec0baf9-7c89-46c5-a17c-fe07cc3f21c3" style="table 10_TD" mode="Opaque" x="0" y="0" width="70" height="15" forecolor="#666666" backcolor="#FFFFFF"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{over_min}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 10_TD" height="15" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement uuid="fd32b96f-6967-4065-b780-8d2e896be7d6" style="AltBck" x="0" y="0" width="70" height="15" forecolor="#666666"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{MIN_all}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
