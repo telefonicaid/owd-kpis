@@ -1,7 +1,3 @@
-/*
--- Query: select * from operator
--- Date: 2014-10-08 19:39
-*/
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1,'AWCC');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (2,'Roshan');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (3,'New1');
@@ -209,11 +205,11 @@ INSERT INTO `operator` (`idoperator`,`alias`) VALUES (204,'Claro CR Telecomunioc
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (205,'Azules y Platas S.A.');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (206,'Virtualis');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (207,'Atlantique Cellulaire');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (208,'Orange Côte d\'Ivoire');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (209,'Comium Côte d\'Ivoire');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (208,'Orange Côte d''Ivoire');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (209,'Comium Côte d''Ivoire');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (210,'Loteny Telecom');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (211,'Oricel Côte d\'Ivoire');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (212,'Aircomm Côte d\'Ivoire');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (211,'Oricel Côte d''Ivoire');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (212,'Aircomm Côte d''Ivoire');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (213,'T-Mobile Hrvatska d.o.o./T-Mobile Croatia LLC');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (214,'Tele2/Tele2 d.o.o.');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (215,'VIPnet/VIPnet d.o.o.');
@@ -676,7 +672,7 @@ INSERT INTO `operator` (`idoperator`,`alias`) VALUES (671,'Tango');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (672,'Voxmobile S.A.');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (673,'CTM GSM');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (674,'Hutchison Telecom');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (675,'Celtel Madagascar (Zain), GSM');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (675,'Celtel Madagascar (Zain); GSM');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (676,'Orange Madagascar, GSM');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (677,'Madamobil, CDMA 2000');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (678,'Telecom Malagasy Mobile, GSM');
@@ -774,7 +770,7 @@ INSERT INTO `operator` (`idoperator`,`alias`) VALUES (769,'Cable & Wireless Pana
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (770,'BSC de Panama S.A.');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (771,'movistar PA');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (772,'Claro Panamá, S.A.');
-INSERT INTO `operator` (`idoperator`,`alias`) VALUES (773,'Digicel (Panamá), S.A.');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (773,'Digicel (Panamá); S.A.');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (774,'Bmobile');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (775,'Greencom');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (776,'Digicel Ltd');
@@ -1221,3 +1217,6 @@ INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1219,'movistar SV');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1221,'Zain GH');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1223,'China Mobile GSM');
 INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1224,'movistar NI');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1225,'movistar AR');
+INSERT INTO `operator` (`idoperator`,`alias`) VALUES (1227,'movistar CR');
+
