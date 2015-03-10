@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.0.final using JasperReports Library version 6.0.0  -->
-<!-- 2015-03-05T10:27:40 -->
+<!-- 2015-03-10T10:34:55 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="118" bottomMargin="34" uuid="5ec0ce05-08d3-4e0d-90bb-a9b2a5df8bd5">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="355"/>
@@ -9,7 +9,7 @@
 	<property name="ireport.jasperserver.url" value="http://jasperprod.service.dsn.inet:8080/jasperserver/"/>
 	<property name="ireport.jasperserver.user" value="jasperadminOWD"/>
 	<property name="ireport.jasperserver.report.resource" value="/Public/OWD/Scheduled_reports/Connected_Terminals_Network_Daily_files/Connected_Terminals_Network_Daily_"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KpisDbAdapter"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KpisDB"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -599,6 +599,52 @@ WHERE (tbl.alias like 'movistar%' OR tbl.alias like 'O2 DE')]]>
 			<fieldDescription><![CDATA[]]></fieldDescription>
 		</field>
 	</subDataset>
+	<subDataset name="TableTotalsMinMaxAvg" uuid="98d53bbb-82dd-419c-9b7e-f263502169ee">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KpisDB"/>
+		<parameter name="from_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange().getStart()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="to_date_d" class="java.util.Date">
+			<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-1").toDateRange().getEnd()]]></defaultValueExpression>
+		</parameter>
+		<parameter name="max" class="java.math.BigDecimal" isForPrompting="false"/>
+		<parameter name="min" class="java.math.BigDecimal" isForPrompting="false"/>
+		<queryString language="SQL">
+			<![CDATA[select MAX(_all.total) as maxTotal, ROUND(AVG(_all.total),2) as avgTotal, MIN(_all.total) as minTotal
+from(
+SELECT DATE(tcn.fecha) AS _day,
+	CASE WHEN T16.alias IS NOT NULL
+	THEN T16.alias
+	ELSE 'Others'
+	END AS _alias,
+	SUM(tcn.total) AS total
+FROM terminales_con_registros_agr as tcn
+INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+LEFT JOIN
+(
+	SELECT tcn.mcc, tcn.mnc, SUM(tcn.total) AS total_d, ncc.country, op.alias AS alias
+	FROM terminales_con_registros_agr AS tcn
+	INNER JOIN network_country_codes AS ncc
+		ON tcn.mcc = ncc.mcc AND tcn.mnc = ncc.mnc
+	INNER JOIN operator AS op
+		ON ncc.alias = op.idoperator
+	WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+	GROUP BY alias
+	ORDER BY total_d DESC
+	LIMIT 16
+) AS T16
+	ON op.alias = T16.alias
+WHERE fecha >= $P{from_date_d} AND fecha <= $P{to_date_d}
+GROUP BY _day
+ORDER BY _day, tcn.total DESC)_all]]>
+		</queryString>
+		<field name="maxTotal" class="java.math.BigDecimal"/>
+		<field name="avgTotal" class="java.math.BigDecimal"/>
+		<field name="minTotal" class="java.math.BigDecimal"/>
+	</subDataset>
 	<parameter name="range" class="net.sf.jasperreports.types.date.DateRange" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new net.sf.jasperreports.types.date.DateRangeBuilder("DAY-31").toDateRange()]]></defaultValueExpression>
 	</parameter>
@@ -1041,7 +1087,12 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 	<summary>
 		<band height="443">
 			<componentElement>
-				<reportElement key="table 12" x="113" y="26" width="429" height="107" uuid="1fa5428b-55ae-42d6-9148-94099b53eedd"/>
+				<reportElement key="table 12" x="0" y="20" width="360" height="29" uuid="1fa5428b-55ae-42d6-9148-94099b53eedd">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="all_data" uuid="ec1cc80e-c5ae-4fed-af53-4de5aa42bbf0">
 						<datasetParameter name="from_date_d">
@@ -1058,16 +1109,19 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="150" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
+					<jr:column width="90" uuid="2c1f4a5e-45a9-4e00-93e6-aeba0174956b">
 						<jr:columnHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="fd137590-b6d2-40e8-9cd9-098a14c228e0">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1076,32 +1130,18 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 								<text><![CDATA[Network]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<staticText>
-								<reportElement mode="Transparent" x="0" y="0" width="150" height="15" forecolor="#666666" backcolor="#B30003" uuid="f15261c0-cd82-43c5-8844-dfeae0845488"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<text><![CDATA[Total    ]]></text>
-							</staticText>
-						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003" uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="a60a1805-7b0a-467b-b9e0-b6f968f21953">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#CCCCCC"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1129,23 +1169,6 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 								<text><![CDATA[Daily Max]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="3b894aa0-501e-40dd-9e95-a6fd6e314b6a"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$P{max}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
 								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="e8414f17-4219-4720-b8ad-2babd37c92b2"/>
@@ -1182,23 +1205,6 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 								<text><![CDATA[Daily Min]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="" isBlankWhenNull="false">
-								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="9f990f67-ded0-4587-85a8-4cebd9472d31"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$P{min}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
 								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="3de53aa3-bc0a-45b2-b0ba-a65cf5e8c7a9"/>
@@ -1235,23 +1241,6 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 								<text><![CDATA[Daily Avg]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter height="15" rowSpan="1">
-							<textField pattern="###0" isBlankWhenNull="false">
-								<reportElement mode="Transparent" x="0" y="0" width="90" height="15" forecolor="#666666" backcolor="#B30003" uuid="1e24df7c-b9b5-4874-9f6f-31dfaa1c0611"/>
-								<box>
-									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
-									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
-								</box>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-									<paragraph lineSpacing="Single"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{avg}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="###0" isBlankWhenNull="false">
 								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="b622ca66-1871-4bfc-a1f5-51834c565c4c"/>
@@ -1287,7 +1276,14 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 				<imageExpression><![CDATA["repo:fox_h2o.jpg"]]></imageExpression>
 			</image>
 			<componentElement>
-				<reportElement key="table 12" mode="Opaque" x="113" y="320" width="429" height="77" forecolor="#000000" backcolor="#FFFFFF" uuid="360bb388-93f8-499f-98e8-18ced070b1c0"/>
+				<reportElement key="table 12" mode="Opaque" x="420" y="20" width="360" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="360bb388-93f8-499f-98e8-18ced070b1c0">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="table_restOB" uuid="46f5bea5-b8b5-4b6f-826d-db5b7efa20ff">
 						<datasetParameter name="from_date_d">
@@ -1298,10 +1294,13 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="150" uuid="9d3759d3-776a-4a8d-be5e-f6b3bd48b17c">
+					<jr:column width="90" uuid="9d3759d3-776a-4a8d-be5e-f6b3bd48b17c">
 						<jr:tableHeader height="15" rowSpan="1">
 							<staticText>
-								<reportElement mode="Opaque" x="0" y="0" width="150" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="bf60ba84-a1b1-4472-b5fe-f5eff8bf05fa"/>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="bf60ba84-a1b1-4472-b5fe-f5eff8bf05fa">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1318,7 +1317,10 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 						</jr:tableHeader>
 						<jr:detailCell height="14" rowSpan="1">
 							<textField pattern="" isBlankWhenNull="false">
-								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="150" height="14" forecolor="#666666" backcolor="#B30003" uuid="45b08211-1124-4708-8f37-88a3d5370ad5"/>
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="45b08211-1124-4708-8f37-88a3d5370ad5">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
 								<box>
 									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
 									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
@@ -1439,6 +1441,170 @@ ORDER BY _day, tcn.total DESC) AS tbl]]>
 									<paragraph lineSpacing="Single"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{_AVG}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table 12" mode="Opaque" x="0" y="290" width="360" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="897db9d6-fff9-489a-983c-d6156b528d54">
+					<property name="local_mesure_unitwidth" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="TableTotalsMinMaxAvg" uuid="c1042508-5902-4351-a79b-2aa36476073f">
+						<datasetParameter name="from_date_d">
+							<datasetParameterExpression><![CDATA[$P{from_date_d}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="to_date_d">
+							<datasetParameterExpression><![CDATA[$P{to_date_d}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="323cf980-2c4c-42fc-906e-67d1347660e0">
+						<jr:tableHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="266d692c-3b55-4dd0-bd7b-f77cd24988ca">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								</reportElement>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Network]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="14" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="14" forecolor="#FFFFFF" backcolor="#F49B19" uuid="a6f676f6-2a18-4bfc-b3a0-627145ba87b2"/>
+								<box>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="250f76cc-5e2a-4604-a082-23b49ca699c0">
+						<jr:tableHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="d8644f05-1d0d-4f2a-a70d-426c056873f6"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Max]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="14" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="3a287e7c-c2cc-4731-a005-eccf451e85f1"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{maxTotal}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="dff03af4-f840-4634-bf3a-e7ae223747f6">
+						<jr:tableHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="34886d23-136a-40f2-b53e-86457af2ed72"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Min]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="14" rowSpan="1">
+							<textField pattern="" isBlankWhenNull="false">
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="69d1de8c-58f8-49a8-9f6c-b852391126f8"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{minTotal}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="a282bca5-252b-4dd8-b3f7-92a4192eef91">
+						<jr:tableHeader height="15" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="90" height="15" forecolor="#FFFFFF" backcolor="#F49B19" uuid="5684d81c-b860-4480-88f9-aca3f392a358"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<text><![CDATA[Daily Avg]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="14" rowSpan="1">
+							<textField pattern="###0" isBlankWhenNull="false">
+								<reportElement style="AltBck" mode="Transparent" x="0" y="0" width="90" height="14" forecolor="#666666" backcolor="#B30003" uuid="7a0f4af8-99fe-47ad-96de-0513d5fd585b"/>
+								<box>
+									<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<topPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<leftPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<bottomPen lineWidth="0.5" lineColor="#CCCCCC"/>
+									<rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+									<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+									<paragraph lineSpacing="Single"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{avgTotal}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
