@@ -58,4 +58,39 @@ INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continen
 INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('54.69.16620','FxOS Hello','EU','NA','Amazon');
 INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('54.69.25165','FxOS Hello','EU','NA','Amazon');
 INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('54.76.48197','FxOS Hello','EU','NA','Amazon');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('149.154.175.114','Telegram','GB','EU','Telegram Messenger L');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('149.154.175.16','Telegram','GB','EU','Telegram Messenger L');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.111','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.90','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.86','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.93','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.107','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.102','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.92','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.108','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.98','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.88','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.103','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.100','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.104','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.96','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.105','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.88','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.103','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.100','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.87','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.101','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.89','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.110','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.91','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.97','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.94','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.106','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.109','Line','JP','AS','Line Corporation'); 
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.85','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.84','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.99','Line','JP','AS','Line Corporation');
+INSERT INTO `alias_ip_servidores_aplicaciones` (`ip`,`alias`,`country`,`continent`, `isp`) VALUES ('203.104.140.95','Line','JP','AS','Line Corporation'); 
+
+
 
